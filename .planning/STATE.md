@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-core-counter-02-PLAN.md
-last_updated: "2026-05-30T18:01:28.329Z"
+stopped_at: Completed 01-core-counter-03-PLAN.md
+last_updated: "2026-05-30T18:05:29.570Z"
 last_activity: 2026-05-30 — Roadmap created (5 phases, 24/24 requirements mapped)
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 8
-  completed_plans: 5
+  completed_plans: 6
   percent: 0
 ---
 
@@ -55,6 +55,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 00-foundation-cleanup P03 | 5 | 3 tasks | 9 files |
 | Phase 01-core-counter P01 | 5 | 2 tasks | 4 files |
 | Phase 01-core-counter P02 | 5 | 2 tasks | 5 files |
+| Phase 01-core-counter P03 | 2 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,9 @@ Recent decisions affecting current work:
 - [Phase 01-core-counter]: Use style={{ rotate: -90 }} on motion.circle for 12-o'clock start — Tailwind -rotate-90 conflicts with Motion inline transforms
 - [Phase 01-core-counter]: DhikrCard receives entry+count+mode as props (not reading store directly) — keeps card reusable for Plan 03 swipe deck
 - [Phase 01-core-counter]: h-dvh on root <main> prevents mobile viewport height jump when browser chrome shows/hides
+- [Phase 01-core-counter]: TapSurface uses pointerup not onClick — unified cross-device, no 300ms delay, discriminates swipe vs tap
+- [Phase 01-core-counter]: DhikrDeck snaps to x:0 before setActiveIndex — prevents visual glitch where card stays offset during index transition
+- [Phase 01-core-counter]: touchAction:pan-y on outer motion.div + touchAction:manipulation on TapSurface inner — layers cooperate: outer owns horizontal drag, inner owns taps
 
 ### Pending Todos
 
@@ -90,6 +94,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-30T18:01:28.327Z
-Stopped at: Completed 01-core-counter-02-PLAN.md
+Last session: 2026-05-30T18:05:29.568Z
+Stopped at: Completed 01-core-counter-03-PLAN.md
 Resume file: None
