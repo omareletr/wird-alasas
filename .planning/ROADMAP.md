@@ -75,7 +75,12 @@ Plans:
   2. A calendar heatmap shows full / partial / none completion level for each day
   3. User can open any day in history and see the per-dhikr completion breakdown
   4. Streak counts follow the defined partial-day rule consistently and are computed purely from history records
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — computeStreaks TDD: pure function returning current + longest streak
+- [ ] 03-02-PLAN.md — HistorySheet with StreakDisplay + HeatmapCalendar (react-activity-calendar)
+- [ ] 03-03-PLAN.md — DayDetailSheet (per-dhikr breakdown) + wire History entry point in header
 
 ### Phase 4: PWA & Offline
 **Goal**: The app installs to the home screen, works fully offline, and protects the user's local devotional data.
@@ -97,7 +102,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4
 | 0. Foundation & Cleanup | 3/3 | Complete | 2026-05-30 |
 | 1. Core Counter | 5/5 | Complete   | 2026-05-30 |
 | 2. Day Boundary & Completion | 3/3 | Complete   | 2026-05-30 |
-| 3. History & Streaks | 0/TBD | Not started | - |
+| 3. History & Streaks | 0/3 | Not started | - |
 | 4. PWA & Offline | 0/TBD | Not started | - |
 
 ## Research Flags
