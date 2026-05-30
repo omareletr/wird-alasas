@@ -62,6 +62,29 @@ Completing the wird al-asas every day without losing count or losing your place.
 - PWA capabilities needed for: offline support, push notifications, screen wake lock
 - Prayer time API needed for Fajr calculation (e.g. Aladhan API)
 
+## Design Direction
+
+**Aesthetic:** Dark, editorial, cinematic — inspired by the Behold app. Contemplative and premium, never gamified.
+
+**Color palette:**
+- Background: pure black (`#000000`)
+- Primary text: white
+- Secondary / metadata text: small-caps uppercase, muted grey, letterSpaced (e.g. `UNTIL FAJR · 12 MINS`)
+- Accent: restrained — a single warm tone (amber/gold) used sparingly for the progress ring and completion states
+- No cards, no shadows, no rounded corners on containers — flat, edge-to-edge sections with hairline dividers
+
+**Typography:**
+- Latin headings: large, confident, generous weight — editorial feel
+- Metadata labels: uppercase, spaced, small — this is a signature Behold-inspired pattern
+- Arabic display: clean and minimal Naskh — **Lateef** or **Noto Naskh Arabic** (test both on device in Phase 1; choose based on tashkeel rendering and elegance at display size)
+- Transliteration: clean serif or spaced sans-serif to complement Arabic
+
+**Imagery:** Full-bleed nature photography (desert, mountains, dawn light) as atmospheric context on key screens — not decoration, but mood
+
+**Navigation:** Bottom tab text labels with a single dot indicator for active state. Minimal circular icon buttons for secondary actions.
+
+**Tone:** No confetti, no badges, no XP. Completion moments are calm and dignified — a soft glow or gentle fade, nothing more.
+
 ## Constraints
 
 - **Platform**: Mobile-first web app (phone is primary device)
