@@ -26,21 +26,23 @@ export function DhikrCard({ entry, count, mode }: DhikrCardProps) {
   });
 
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full gap-6 px-6 select-none">
+    <div className="flex flex-col items-center justify-center h-full w-full gap-8 px-8 select-none">
       {/* Progress ring + count overlay */}
       <div className="relative flex items-center justify-center">
-        <ProgressRing count={count} target={target} size={280} strokeWidth={6} />
-        <div className="absolute flex flex-col items-center">
+        <ProgressRing count={count} target={target} size={260} strokeWidth={4} />
+        <div className="absolute flex flex-col items-center gap-1">
           <motion.span
             key={count}
-            className="text-5xl font-light tabular-nums text-white"
+            className="text-5xl font-mono tabular-nums text-white leading-none"
             initial={{ scale: 1.06 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
           >
             {count}
           </motion.span>
-          <span className="text-sm text-white/40">/ {target}</span>
+          <span className="text-[11px] font-mono tracking-widest text-accent">
+            [ {target} ]
+          </span>
         </div>
       </div>
 
@@ -48,25 +50,19 @@ export function DhikrCard({ entry, count, mode }: DhikrCardProps) {
       <p
         dir="rtl"
         lang="ar"
-        className="text-center text-2xl text-white/90"
-        style={{ fontFamily: "var(--font-arabic)", lineHeight: 2 }}
+        className="text-center text-3xl text-white"
+        style={{ fontFamily: "var(--font-arabic)", lineHeight: 2.2 }}
       >
         {entry.arabic}
       </p>
 
-      {/* Transliteration — always LTR */}
-      <p
-        className="text-center text-sm text-white/60 italic leading-relaxed"
-        dir="ltr"
-      >
+      {/* Transliteration */}
+      <p className="text-center text-[13px] font-mono italic text-white/50 leading-relaxed" dir="ltr">
         {entry.transliteration}
       </p>
 
-      {/* Translation — always LTR */}
-      <p
-        className="text-center text-sm text-white/40 leading-relaxed max-w-xs"
-        dir="ltr"
-      >
+      {/* Translation */}
+      <p className="text-center text-[12px] font-mono text-white/30 leading-relaxed max-w-xs" dir="ltr">
         {entry.translation}
       </p>
     </div>

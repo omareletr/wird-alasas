@@ -8,7 +8,7 @@ export function ModeToggle() {
   return (
     <button
       onClick={() => setMode(mode === "full" ? "shortened" : "full")}
-      className="text-xs text-white/40 hover:text-white/70 transition-colors px-2 py-1 rounded"
+      className="text-[10px] font-mono tracking-widest uppercase text-white/30 hover:text-white/60 transition-colors px-2 py-1"
       aria-label={`Switch to ${mode === "full" ? "shortened" : "full"} mode`}
     >
       {mode === "full" ? "Full" : "Short"}

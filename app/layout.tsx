@@ -1,21 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Noto_Naskh_Arabic } from "next/font/google";
+import { Geist_Mono, IBM_Plex_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 import { StoreHydration } from "@/components/StoreHydration";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
-const notoNaskhArabic = Noto_Naskh_Arabic({
+const ibmPlexArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
-  weight: ["400", "700"],
+  weight: ["400", "600"],
   variable: "--font-arabic",
   display: "swap",
 });
@@ -31,10 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark ${notoNaskhArabic.variable}`}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" className={`dark ${ibmPlexArabic.variable} ${geistMono.variable}`}>
+      <body className="antialiased">
         <StoreHydration />
         {children}
       </body>

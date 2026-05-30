@@ -32,7 +32,7 @@ export default function CounterPage() {
   const showOverlay = allComplete && !overlayDismissed;
 
   return (
-    <main className="relative flex flex-col h-dvh w-full bg-black overflow-hidden">
+    <main className="relative flex flex-col h-dvh w-full bg-background overflow-hidden">
       {/* Header: mode toggle on left, settings gear on right */}
       <div
         className="flex items-center justify-between px-4 shrink-0"

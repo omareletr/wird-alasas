@@ -32,7 +32,7 @@ export function ProgressRing({
         cy={center}
         r={radius}
         fill="none"
-        stroke="rgba(255,255,255,0.08)"
+        stroke="oklch(1 0 0 / 8%)"
         strokeWidth={strokeWidth}
       />
       {/* Progress ring */}
@@ -41,7 +41,7 @@ export function ProgressRing({
         cy={center}
         r={radius}
         fill="none"
-        stroke={completed ? "#a8edaa" : "white"}
+        stroke="var(--accent)"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         initial={{ pathLength: 0 }}
