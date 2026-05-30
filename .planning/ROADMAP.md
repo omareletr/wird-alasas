@@ -29,7 +29,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. App data (settings, active session, history) reads and writes to localStorage + IndexedDB with a versioned schema
   3. `getDevotionalDay(now, location) → dayKey` exists as a single pure function with passing unit tests across timezone/DST edge cases
   4. State management (Zustand store) is wired and persists/rehydrates the active session across a page reload
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 00-01-PLAN.md — Supabase removal, dark theme, branded placeholder page
+- [ ] 00-02-PLAN.md — Vitest setup + getDevotionalDay TDD
+- [ ] 00-03-PLAN.md — Storage schema, IndexedDB helper, Zustand stores, StoreHydration
 
 ### Phase 1: Core Counter
 **Goal**: A focused, distraction-free counting experience for all 4 adhkar that never loses count — the MVP validation slice.
@@ -82,7 +87,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 0. Foundation & Cleanup | 0/TBD | Not started | - |
+| 0. Foundation & Cleanup | 0/3 | Not started | - |
 | 1. Core Counter | 0/TBD | Not started | - |
 | 2. Day Boundary & Completion | 0/TBD | Not started | - |
 | 3. History & Streaks | 0/TBD | Not started | - |
