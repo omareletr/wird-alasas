@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 00-foundation-cleanup-02-PLAN.md
-last_updated: "2026-05-30T17:06:28.356Z"
+stopped_at: Completed 00-foundation-cleanup-03-PLAN.md
+last_updated: "2026-05-30T17:16:06.684Z"
 last_activity: 2026-05-30 — Roadmap created (5 phases, 24/24 requirements mapped)
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0%
 *Updated after each plan completion*
 | Phase 00-foundation-cleanup P01 | 2 | 2 tasks | 12 files |
 | Phase 00-foundation-cleanup P02 | 13 | 2 tasks | 4 files |
+| Phase 00-foundation-cleanup P03 | 5 | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,8 @@ Recent decisions affecting current work:
 - [Phase 00-foundation-cleanup]: No-op middleware uses empty matcher [] — runs on zero paths, no auth logic needed
 - [Phase 00-foundation-cleanup]: Use UTC date components (getUTCFullYear/Month/Date) in getDevotionalDay for machine-timezone-independent day key extraction
 - [Phase 00-foundation-cleanup]: Test cases for getDevotionalDay use January dates (winter) to avoid MuslimWorldLeague high-latitude Fajr adjustment that pushes Fajr to midnight in summer
+- [Phase 00-foundation-cleanup]: skipHydration: true on Zustand stores prevents React hydration mismatch — client rehydrates in useEffect via StoreHydration component
+- [Phase 00-foundation-cleanup]: Persist key names 'wird-session' and 'wird-settings' locked — renaming them clears all user localStorage data
 
 ### Pending Todos
 
@@ -80,6 +83,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-30T17:06:28.354Z
-Stopped at: Completed 00-foundation-cleanup-02-PLAN.md
+Last session: 2026-05-30T17:16:06.682Z
+Stopped at: Completed 00-foundation-cleanup-03-PLAN.md
 Resume file: None
