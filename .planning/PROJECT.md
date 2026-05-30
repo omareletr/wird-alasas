@@ -77,6 +77,8 @@ Completing the wird al-asas every day without losing count or losing your place.
 | Fajr-based day reset | Aligns with Islamic day boundary | — Pending |
 | One-at-a-time swipe UI | Focused, distraction-free counting experience | — Pending |
 | PWA over native app | Fastest to build on existing Next.js starter | — Pending |
+| Muslim World League prayer method hardcoded | Fajr used only as a rough day boundary; not worth exposing a setting for this precision | — Pending |
+| Push notifications out of scope | iOS requires both installed PWA and a server; too much complexity for v1 | — Pending |
 
 ---
 *Last updated: 2026-05-29 after initialization*
