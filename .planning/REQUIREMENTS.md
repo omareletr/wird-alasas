@@ -15,14 +15,14 @@
 
 ### Counter
 
-- [ ] **COUNT-01**: One dhikr shown at a time, displaying Arabic text, transliteration, and English translation
+- [x] **COUNT-01**: One dhikr shown at a time, displaying Arabic text, transliteration, and English translation
 - [ ] **COUNT-02**: User can swipe between the 4 adhkar in any order
-- [ ] **COUNT-03**: Full-screen tap increments count for the current dhikr
-- [ ] **COUNT-04**: Circular progress ring fills toward target as count increases
-- [ ] **COUNT-05**: Tapping past the target is allowed; completion mark appears at target but counting continues
+- [x] **COUNT-03**: Full-screen tap increments count for the current dhikr
+- [x] **COUNT-04**: Circular progress ring fills toward target as count increases
+- [x] **COUNT-05**: Tapping past the target is allowed; completion mark appears at target but counting continues
 - [ ] **COUNT-06**: Each dhikr tracked independently (any order, any time)
-- [ ] **COUNT-07**: User can choose Full mode (200/200/100/100) or Shortened mode (20/20/10/10) per session
-- [ ] **COUNT-08**: Count progress for all 4 adhkar persists if app is closed; resumes from saved count on reopen
+- [x] **COUNT-07**: User can choose Full mode (200/200/100/100) or Shortened mode (20/20/10/10) per session
+- [x] **COUNT-08**: Count progress for all 4 adhkar persists if app is closed; resumes from saved count on reopen
 - [ ] **COUNT-09**: Screen stays awake while the counter screen is active (Wake Lock API)
 - [ ] **COUNT-10**: Haptic feedback on each tap; visual pulse fallback for iOS (Vibration API unsupported on iOS Safari)
 
@@ -42,7 +42,7 @@
 
 ### Settings
 
-- [ ] **SET-01**: User can set a default mode (Full or Shortened) that persists across sessions
+- [x] **SET-01**: User can set a default mode (Full or Shortened) that persists across sessions
 
 ### PWA & Install
 
@@ -87,18 +87,18 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | FOUND-01 | Phase 0 | Complete |
-| COUNT-01 | Phase 1 | Pending |
+| COUNT-01 | Phase 1 | Complete |
 | COUNT-02 | Phase 1 | Pending |
-| COUNT-03 | Phase 1 | Pending |
-| COUNT-04 | Phase 1 | Pending |
-| COUNT-05 | Phase 1 | Pending |
+| COUNT-03 | Phase 1 | Complete |
+| COUNT-04 | Phase 1 | Complete |
+| COUNT-05 | Phase 1 | Complete |
 | COUNT-06 | Phase 1 | Pending |
-| COUNT-07 | Phase 1 | Pending |
-| COUNT-08 | Phase 1 | Pending |
+| COUNT-07 | Phase 1 | Complete |
+| COUNT-08 | Phase 1 | Complete |
 | COUNT-09 | Phase 1 | Pending |
 | COUNT-10 | Phase 1 | Pending |
 | COMP-03 | Phase 1 | Pending |
-| SET-01 | Phase 1 | Pending |
+| SET-01 | Phase 1 | Complete |
 | FOUND-02 | Phase 2 | Pending |
 | FOUND-03 | Phase 2 | Pending |
 | COMP-01 | Phase 2 | Pending |

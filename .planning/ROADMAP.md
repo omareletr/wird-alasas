@@ -95,7 +95,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 0. Foundation & Cleanup | 3/3 | Complete | 2026-05-30 |
-| 1. Core Counter | 0/5 | Planned | - |
+| 1. Core Counter | 1/5 | In Progress|  |
 | 2. Day Boundary & Completion | 0/TBD | Not started | - |
 | 3. History & Streaks | 0/TBD | Not started | - |
 | 4. PWA & Offline | 0/TBD | Not started | - |

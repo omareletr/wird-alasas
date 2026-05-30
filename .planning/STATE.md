@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 00-foundation-cleanup-03-PLAN.md
-last_updated: "2026-05-30T17:19:20.511Z"
+stopped_at: Completed 01-core-counter-01-PLAN.md
+last_updated: "2026-05-30T18:00:13.029Z"
 last_activity: 2026-05-30 — Roadmap created (5 phases, 24/24 requirements mapped)
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 8
+  completed_plans: 4
   percent: 0
 ---
 
@@ -53,6 +53,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 00-foundation-cleanup P01 | 2 | 2 tasks | 12 files |
 | Phase 00-foundation-cleanup P02 | 13 | 2 tasks | 4 files |
 | Phase 00-foundation-cleanup P03 | 5 | 3 tasks | 9 files |
+| Phase 01-core-counter P01 | 5 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -70,6 +71,8 @@ Recent decisions affecting current work:
 - [Phase 00-foundation-cleanup]: Test cases for getDevotionalDay use January dates (winter) to avoid MuslimWorldLeague high-latitude Fajr adjustment that pushes Fajr to midnight in summer
 - [Phase 00-foundation-cleanup]: skipHydration: true on Zustand stores prevents React hydration mismatch — client rehydrates in useEffect via StoreHydration component
 - [Phase 00-foundation-cleanup]: Persist key names 'wird-session' and 'wird-settings' locked — renaming them clears all user localStorage data
+- [Phase 01-core-counter]: ADHKAR array is single source of truth for all target values — downstream code must call getTarget(entry, mode), never hardcode 200/20/100/10
+- [Phase 01-core-counter]: Zustand store testing uses getState()/setState() directly without React components; skipHydration prevents localStorage interference in jsdom
 
 ### Pending Todos
 
@@ -83,6 +86,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-30T17:16:06.682Z
-Stopped at: Completed 00-foundation-cleanup-03-PLAN.md
+Last session: 2026-05-30T18:00:13.027Z
+Stopped at: Completed 01-core-counter-01-PLAN.md
 Resume file: None
