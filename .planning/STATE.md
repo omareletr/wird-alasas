@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-core-counter-04-PLAN.md
-last_updated: "2026-05-30T18:06:11.894Z"
+stopped_at: Completed 01-core-counter-05-PLAN.md
+last_updated: "2026-05-30T18:36:43.610Z"
 last_activity: 2026-05-30 — Roadmap created (5 phases, 24/24 requirements mapped)
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 8
-  completed_plans: 7
+  completed_plans: 8
   percent: 0
 ---
 
@@ -57,6 +57,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01-core-counter P02 | 5 | 2 tasks | 5 files |
 | Phase 01-core-counter P03 | 2 | 2 tasks | 3 files |
 | Phase 01-core-counter P04 | 7 | 2 tasks | 8 files |
+| Phase 01-core-counter P05 | 25 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,7 @@ Recent decisions affecting current work:
 - [Phase 01-core-counter]: touchAction:pan-y on outer motion.div + touchAction:manipulation on TapSurface inner — layers cooperate: outer owns horizontal drag, inner owns taps
 - [Phase 01-core-counter]: useHaptic fires on count change (useEffect) not on tap event — count is single source of truth for a tap
 - [Phase 01-core-counter]: Safe area inset applied via inline style env(safe-area-inset-top, 16px) — Tailwind v4 pt-safe-top not available
+- [Phase 01-core-counter]: CompletionOverlay uses bg-black/80 and no auto-dismiss — completion moment is for the user to sit with, local overlayDismissed state (not store) is ephemeral UI state
 
 ### Pending Todos
 
@@ -97,6 +99,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-30T18:06:11.893Z
-Stopped at: Completed 01-core-counter-04-PLAN.md
+Last session: 2026-05-30T18:36:43.609Z
+Stopped at: Completed 01-core-counter-05-PLAN.md
 Resume file: None
