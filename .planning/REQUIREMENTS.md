@@ -38,7 +38,7 @@
 - [x] **HIST-01**: User can view current streak (consecutive days with at least 1 dhikr completed)
 - [x] **HIST-02**: User can view longest streak ever achieved
 - [x] **HIST-03**: Calendar heatmap shows full / partial / none completion level per day
-- [ ] **HIST-04**: User can see per-dhikr completion breakdown for each day in history
+- [x] **HIST-04**: User can see per-dhikr completion breakdown for each day in history
 
 ### Settings
 
@@ -107,7 +107,7 @@
 | HIST-01 | Phase 3 | Complete |
 | HIST-02 | Phase 3 | Complete |
 | HIST-03 | Phase 3 | Complete |
-| HIST-04 | Phase 3 | Pending |
+| HIST-04 | Phase 3 | Complete |
 | PWA-01 | Phase 4 | Pending |
 | PWA-02 | Phase 4 | Pending |
 

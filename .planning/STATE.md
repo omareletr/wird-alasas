@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 03-history-streaks-02-PLAN.md
-last_updated: "2026-05-30T23:03:59.483Z"
+stopped_at: Completed 03-history-streaks-03-PLAN.md
+last_updated: "2026-05-30T23:23:18.061Z"
 last_activity: 2026-05-30 — Roadmap created (5 phases, 24/24 requirements mapped)
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 14
-  completed_plans: 13
+  completed_plans: 14
   percent: 0
 ---
 
@@ -63,6 +63,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-day-boundary-completion P03 | 35 | 3 tasks | 3 files |
 | Phase 03-history-streaks P01 | 77 | 3 tasks | 3 files |
 | Phase 03-history-streaks P02 | 3 | 2 tasks | 5 files |
+| Phase 03-history-streaks P03 | 25 | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -104,6 +105,8 @@ Recent decisions affecting current work:
 - [Phase 03-history-streaks]: react-activity-calendar v3 uses named export {ActivityCalendar}, not default export
 - [Phase 03-history-streaks]: eventHandlers API removed in react-activity-calendar v3 — use renderBlock + React.cloneElement for click handlers
 - [Phase 03-history-streaks]: vitest css.postcss:{} overrides project postcss.config.mjs to prevent library CSS transform errors in test environment
+- [Phase 03-history-streaks]: DayDetailSheet uses absolute-positioned div overlay inside HistorySheet instead of nested Radix Sheet — avoids focus trap conflict
+- [Phase 03-history-streaks]: relative class on SheetContent breaks fixed positioning via tailwind-merge — never pass relative to SheetContent className
 
 ### Pending Todos
 
@@ -117,6 +120,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-30T23:03:59.481Z
-Stopped at: Completed 03-history-streaks-02-PLAN.md
+Last session: 2026-05-30T23:23:18.058Z
+Stopped at: Completed 03-history-streaks-03-PLAN.md
 Resume file: None
