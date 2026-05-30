@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 02-day-boundary-completion-03-PLAN.md
-last_updated: "2026-05-30T22:21:28.636Z"
+stopped_at: Completed 03-history-streaks-01-PLAN.md
+last_updated: "2026-05-30T22:59:32.575Z"
 last_activity: 2026-05-30 — Roadmap created (5 phases, 24/24 requirements mapped)
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 11
-  completed_plans: 11
+  total_plans: 14
+  completed_plans: 12
   percent: 0
 ---
 
@@ -61,6 +61,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-day-boundary-completion P01 | 1 | 2 tasks | 2 files |
 | Phase 02-day-boundary-completion P02 | 231 | 2 tasks | 3 files |
 | Phase 02-day-boundary-completion P03 | 35 | 3 tasks | 3 files |
+| Phase 03-history-streaks P01 | 77 | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -96,6 +97,9 @@ Recent decisions affecting current work:
 - [Phase 02-day-boundary-completion]: cleanup() from @testing-library/react required in afterEach when tests share document-level event listeners across renderHook calls
 - [Phase 02-day-boundary-completion]: DayCompletionBadge renders null for 'none' state — no empty space, counter header stays clean
 - [Phase 02-day-boundary-completion]: useGeolocation called independently in both page.tsx and SettingsSheet — two instances, no prop-drilling, second call gets cached result via maximumAge:60000
+- [Phase 03-history-streaks]: Partial days sustain streak (classifyDay !== none) — consistent with STATE.md streak policy
+- [Phase 03-history-streaks]: Current streak walks backward from last active day (not today) — prevents off-by-one when today has no record
+- [Phase 03-history-streaks]: HeatmapCalendar.test.ts scaffold intentionally RED in Wave 1 — turns GREEN when plan 03-02 creates HeatmapCalendar.tsx
 
 ### Pending Todos
 
@@ -109,6 +113,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-30T22:15:39.602Z
-Stopped at: Completed 02-day-boundary-completion-03-PLAN.md
+Last session: 2026-05-30T22:59:32.573Z
+Stopped at: Completed 03-history-streaks-01-PLAN.md
 Resume file: None
