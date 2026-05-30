@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 0: Foundation & Cleanup** - Strip Supabase, establish local storage schema and the `getDevotionalDay()` keystone
 - [x] **Phase 1: Core Counter** - Full-screen tap counter with ring, modes, swipe deck, Arabic rendering, wake lock (completed 2026-05-30)
-- [ ] **Phase 2: Day Boundary & Completion** - Offline Fajr calculation, daily rollover, full/partial completion records
+- [x] **Phase 2: Day Boundary & Completion** - Offline Fajr calculation, daily rollover, full/partial completion records (completed 2026-05-30)
 - [ ] **Phase 3: History & Streaks** - Streaks, calendar heatmap, per-day breakdown
 - [ ] **Phase 4: PWA & Offline** - Installable, offline-capable, data persistence safeguards
 
@@ -96,7 +96,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 0. Foundation & Cleanup | 3/3 | Complete | 2026-05-30 |
 | 1. Core Counter | 5/5 | Complete   | 2026-05-30 |
-| 2. Day Boundary & Completion | 1/3 | In Progress|  |
+| 2. Day Boundary & Completion | 3/3 | Complete   | 2026-05-30 |
 | 3. History & Streaks | 0/TBD | Not started | - |
 | 4. PWA & Offline | 0/TBD | Not started | - |
 

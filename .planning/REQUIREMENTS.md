@@ -31,7 +31,7 @@
 - [x] **COMP-01**: When all 4 adhkar reach their target, wird is marked fully complete for the day
 - [x] **COMP-02**: When at least 1 dhikr is completed but not all 4, wird is marked partially complete for the day
 - [x] **COMP-03**: Full wird completion triggers a calm, dignified celebration moment (no confetti or gamification)
-- [ ] **COMP-04**: Partial completion is visually distinct from full completion throughout the app (faded / different color)
+- [x] **COMP-04**: Partial completion is visually distinct from full completion throughout the app (faded / different color)
 
 ### History
 
@@ -103,7 +103,7 @@
 | FOUND-03 | Phase 2 | Complete |
 | COMP-01 | Phase 2 | Complete |
 | COMP-02 | Phase 2 | Complete |
-| COMP-04 | Phase 2 | Pending |
+| COMP-04 | Phase 2 | Complete |
 | HIST-01 | Phase 3 | Pending |
 | HIST-02 | Phase 3 | Pending |
 | HIST-03 | Phase 3 | Pending |
