@@ -87,8 +87,6 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | FOUND-01 | Phase 0 | Pending |
-| FOUND-02 | Phase 2 | Pending |
-| FOUND-03 | Phase 2 | Pending |
 | COUNT-01 | Phase 1 | Pending |
 | COUNT-02 | Phase 1 | Pending |
 | COUNT-03 | Phase 1 | Pending |
@@ -99,15 +97,17 @@
 | COUNT-08 | Phase 1 | Pending |
 | COUNT-09 | Phase 1 | Pending |
 | COUNT-10 | Phase 1 | Pending |
+| COMP-03 | Phase 1 | Pending |
+| SET-01 | Phase 1 | Pending |
+| FOUND-02 | Phase 2 | Pending |
+| FOUND-03 | Phase 2 | Pending |
 | COMP-01 | Phase 2 | Pending |
 | COMP-02 | Phase 2 | Pending |
-| COMP-03 | Phase 1 | Pending |
 | COMP-04 | Phase 2 | Pending |
 | HIST-01 | Phase 3 | Pending |
 | HIST-02 | Phase 3 | Pending |
 | HIST-03 | Phase 3 | Pending |
 | HIST-04 | Phase 3 | Pending |
-| SET-01 | Phase 1 | Pending |
 | PWA-01 | Phase 4 | Pending |
 | PWA-02 | Phase 4 | Pending |
 
@@ -117,4 +117,4 @@
 - Unmapped: 0 ✓
 
 ---
-*Requirements defined: 2026-05-29*
+*Requirements defined: 2026-05-29 · Traceability updated: 2026-05-30 after roadmap creation*
