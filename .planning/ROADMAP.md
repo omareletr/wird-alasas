@@ -46,7 +46,14 @@ Plans:
   3. User can switch between Full (200/200/100/100) and Shortened (20/20/10/10) modes for the session, and a chosen default persists across sessions
   4. Each tap gives feedback (haptic where supported, visual pulse on iOS) and the screen stays awake while counting
   5. Closing and reopening the app resumes every dhikr from its saved count; reaching a dhikr's target shows a calm, non-gamified completion moment
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Test scaffold: adhkar data file + store unit tests (Wave 0)
+- [ ] 01-02-PLAN.md — Counter page, DhikrCard, ProgressRing (Arabic font, SVG ring)
+- [ ] 01-03-PLAN.md — TapSurface + DhikrDeck swipe navigation (tap/swipe discrimination)
+- [ ] 01-04-PLAN.md — useWakeLock, useHaptic, ModeToggle, SettingsSheet (parallel with 03)
+- [ ] 01-05-PLAN.md — CompletionOverlay + Arabic text confirmation checkpoint
 
 ### Phase 2: Day Boundary & Completion
 **Goal**: Counts become dated devotional records that roll over at the correct Fajr boundary and classify each day as full or partial completion.
@@ -87,8 +94,8 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 0. Foundation & Cleanup | 2/3 | In Progress|  |
-| 1. Core Counter | 0/TBD | Not started | - |
+| 0. Foundation & Cleanup | 3/3 | Complete | 2026-05-30 |
+| 1. Core Counter | 0/5 | Planned | - |
 | 2. Day Boundary & Completion | 0/TBD | Not started | - |
 | 3. History & Streaks | 0/TBD | Not started | - |
 | 4. PWA & Offline | 0/TBD | Not started | - |
