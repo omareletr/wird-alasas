@@ -12,40 +12,34 @@ export interface DhikrEntry {
 export const ADHKAR: DhikrEntry[] = [
   {
     index: 0,
-    arabic:
-      "حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
-    transliteration:
-      "Hasbiyallahu la ilaha illa huwa, 'alayhi tawakkaltu wa huwa rabbul 'arshil 'azim",
+    arabic: "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
+    transliteration: "Hasbunallahu wa ni'mal-Wakeel",
     translation:
-      "Allah is sufficient for me; there is no deity except Him. On Him I have relied, and He is the Lord of the Great Throne.",
+      "Sufficient for us is Allah, and He is the best disposer of affairs.",
     targets: { full: 200, shortened: 20 },
   },
   {
     index: 1,
-    arabic:
-      "أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ الَّذِي لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",
-    transliteration:
-      "Astaghfirullaahal-'Azeema alladhee laa ilaaha illaa Huwal-Hayyul-Qayyoomu wa atoobu ilayh",
-    translation:
-      "I seek forgiveness from Allah the Magnificent, other than Whom there is no deity, the Ever-Living, the Sustainer of existence, and I repent to Him.",
+    arabic: "أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ",
+    transliteration: "Astaghfirullah al-'Azeem",
+    translation: "I seek forgiveness from Allah, the Most Great.",
     targets: { full: 200, shortened: 20 },
   },
   {
     index: 2,
-    arabic:
-      "لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ",
-    transliteration:
-      "La ilaha illallahu wahdahu la sharika lahu, lahul-mulku wa lahul-hamdu wa huwa 'ala kulli shay'in qadir",
-    translation:
-      "There is no deity except Allah alone, with no partner or associate; His is the dominion, His is all praise, and He has power over all things.",
+    arabic: "لَا إِلَٰهَ إِلَّا اللَّهُ الْمَلِكُ الْحَقُّ الْمُبِينُ",
+    transliteration: "La ilaha illallahul-Malikul-Haqqul-Mubeen",
+    translation: "There is no deity but Allah, the King, the Clear Truth.",
     targets: { full: 100, shortened: 10 },
   },
   {
     index: 3,
-    arabic: "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَىٰ نَبِيِّنَا مُحَمَّدٍ",
-    transliteration: "Allahumma salli wa sallim 'ala nabiyyina Muhammad",
+    arabic:
+      "اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَسَلِّمْ",
+    transliteration:
+      "Allahumma salli 'ala Sayyidina Muhammadin wa 'ala alihi wa sahbihi wa sallim",
     translation:
-      "O Allah, send prayers and peace upon our Prophet Muhammad.",
+      "O Allah, send prayers and peace upon our master Muhammad and upon his family and companions.",
     targets: { full: 100, shortened: 10 },
   },
 ];
