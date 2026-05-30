@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sheet";
 import { StreakDisplay } from "@/components/history/StreakDisplay";
 import { HeatmapCalendar, recordsToActivityData } from "@/components/history/HeatmapCalendar";
+import { DayDetailSheet } from "@/components/history/DayDetailSheet";
 import { getAllDailyRecords } from "@/lib/storage/idb";
 import { computeStreaks } from "@/lib/utils/streaks";
 import type { DailyRecord } from "@/lib/storage/schema";
@@ -26,9 +27,6 @@ export function HistorySheet() {
   const activityData = records !== null ? recordsToActivityData(records) : [];
   const streaks = records !== null ? computeStreaks(records) : { current: 0, longest: 0 };
 
-  // selectedDay is stored here for plan 03-03 (DayDetailSheet)
-  void selectedDay;
-
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -39,7 +37,7 @@ export function HistorySheet() {
           <History size={20} />
         </button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="bg-card border-t border-border">
+      <SheetContent side="bottom" className="bg-card border-t border-border relative">
         <SheetHeader>
           <SheetTitle className="text-[11px] font-mono tracking-[0.2em] uppercase text-white/50 text-left">
             History
@@ -58,6 +56,10 @@ export function HistorySheet() {
             </>
           )}
         </div>
+        <DayDetailSheet
+          dayKey={selectedDay}
+          onClose={() => setSelectedDay(null)}
+        />
       </SheetContent>
     </Sheet>
   );
