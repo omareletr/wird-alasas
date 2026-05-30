@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 03-history-streaks-01-PLAN.md
-last_updated: "2026-05-30T22:59:32.575Z"
+stopped_at: Completed 03-history-streaks-02-PLAN.md
+last_updated: "2026-05-30T23:03:59.483Z"
 last_activity: 2026-05-30 — Roadmap created (5 phases, 24/24 requirements mapped)
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 14
-  completed_plans: 12
+  completed_plans: 13
   percent: 0
 ---
 
@@ -62,6 +62,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 02-day-boundary-completion P02 | 231 | 2 tasks | 3 files |
 | Phase 02-day-boundary-completion P03 | 35 | 3 tasks | 3 files |
 | Phase 03-history-streaks P01 | 77 | 3 tasks | 3 files |
+| Phase 03-history-streaks P02 | 3 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -100,6 +101,9 @@ Recent decisions affecting current work:
 - [Phase 03-history-streaks]: Partial days sustain streak (classifyDay !== none) — consistent with STATE.md streak policy
 - [Phase 03-history-streaks]: Current streak walks backward from last active day (not today) — prevents off-by-one when today has no record
 - [Phase 03-history-streaks]: HeatmapCalendar.test.ts scaffold intentionally RED in Wave 1 — turns GREEN when plan 03-02 creates HeatmapCalendar.tsx
+- [Phase 03-history-streaks]: react-activity-calendar v3 uses named export {ActivityCalendar}, not default export
+- [Phase 03-history-streaks]: eventHandlers API removed in react-activity-calendar v3 — use renderBlock + React.cloneElement for click handlers
+- [Phase 03-history-streaks]: vitest css.postcss:{} overrides project postcss.config.mjs to prevent library CSS transform errors in test environment
 
 ### Pending Todos
 
@@ -113,6 +117,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-30T22:59:32.573Z
-Stopped at: Completed 03-history-streaks-01-PLAN.md
+Last session: 2026-05-30T23:03:59.481Z
+Stopped at: Completed 03-history-streaks-02-PLAN.md
 Resume file: None
