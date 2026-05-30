@@ -41,8 +41,10 @@ describe("classifyDay", () => {
 
   // ── mode independence ──────────────────────────────────────────────────────
 
-  it("mode independence — shortened counts with full mode → 'partial' (20 < 200)", () => {
-    expect(classifyDay(counts(20, 20, 10, 10), "full")).toBe("partial");
+  it("mode independence — shortened counts with full mode → 'none' (20 < 200, none reach full targets)", () => {
+    // Same counts that yield "full" in shortened mode yield "none" in full mode
+    // because none of the counts (20, 20, 10, 10) reach the full targets (200, 200, 100, 100)
+    expect(classifyDay(counts(20, 20, 10, 10), "full")).toBe("none");
   });
 
   // ── boundary / over-target ─────────────────────────────────────────────────
