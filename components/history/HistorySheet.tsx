@@ -37,7 +37,7 @@ export function HistorySheet() {
           <History size={20} />
         </button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="bg-card border-t border-border relative">
+      <SheetContent side="bottom" className="bg-card border-t border-border">
         <SheetHeader>
           <SheetTitle className="text-[11px] font-mono tracking-[0.2em] uppercase text-white/50 text-left">
             History
