@@ -7,6 +7,9 @@ import { CompletionOverlay } from "@/components/counter/CompletionOverlay";
 import { useSessionStore } from "@/lib/store/sessionStore";
 import { useSettingsStore } from "@/lib/store/settingsStore";
 import { useWakeLock } from "@/lib/hooks/useWakeLock";
+import { useFajrRollover } from "@/lib/hooks/useFajrRollover";
+import { useGeolocation } from "@/lib/hooks/useGeolocation";
+import { DayCompletionBadge } from "@/components/counter/DayCompletionBadge";
 import { ADHKAR, getTarget } from "@/lib/data/adhkar";
 
 export default function CounterPage() {
@@ -17,6 +20,10 @@ export default function CounterPage() {
 
   // Keep the screen awake while the counter is open
   useWakeLock();
+  // Archive completed day at Fajr and reset session
+  useFajrRollover();
+  // Silently acquire geolocation for prayer time calculation; status surfaced in SettingsSheet
+  useGeolocation();
 
   // Initialize a new session from defaultMode if no session is in progress
   useEffect(() => {
@@ -39,6 +46,7 @@ export default function CounterPage() {
         style={{ paddingTop: "env(safe-area-inset-top, 16px)" }}
       >
         <ModeToggle />
+        <DayCompletionBadge />
         <SettingsSheet />
       </div>
       {/* Counter deck fills remaining space */}
