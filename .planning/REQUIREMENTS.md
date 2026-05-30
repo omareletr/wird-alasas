@@ -10,8 +10,8 @@
 ### Foundation
 
 - [x] **FOUND-01**: App stores all data locally on device (localStorage + IndexedDB) — no account or login required
-- [ ] **FOUND-02**: Day resets at Fajr time, calculated locally from device location using adhan-js (no network dependency)
-- [ ] **FOUND-03**: Manual location entry available as fallback when geolocation is denied or unavailable
+- [x] **FOUND-02**: Day resets at Fajr time, calculated locally from device location using adhan-js (no network dependency)
+- [x] **FOUND-03**: Manual location entry available as fallback when geolocation is denied or unavailable
 
 ### Counter
 
@@ -99,8 +99,8 @@
 | COUNT-10 | Phase 1 | Complete |
 | COMP-03 | Phase 1 | Complete |
 | SET-01 | Phase 1 | Complete |
-| FOUND-02 | Phase 2 | Pending |
-| FOUND-03 | Phase 2 | Pending |
+| FOUND-02 | Phase 2 | Complete |
+| FOUND-03 | Phase 2 | Complete |
 | COMP-01 | Phase 2 | Complete |
 | COMP-02 | Phase 2 | Complete |
 | COMP-04 | Phase 2 | Pending |

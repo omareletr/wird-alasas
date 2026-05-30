@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 02-day-boundary-completion-01-PLAN.md
-last_updated: "2026-05-30T22:02:22.209Z"
+stopped_at: Completed 02-day-boundary-completion-02-PLAN.md
+last_updated: "2026-05-30T22:04:55.974Z"
 last_activity: 2026-05-30 — Roadmap created (5 phases, 24/24 requirements mapped)
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 11
-  completed_plans: 9
+  completed_plans: 10
   percent: 0
 ---
 
@@ -59,6 +59,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01-core-counter P04 | 7 | 2 tasks | 8 files |
 | Phase 01-core-counter P05 | 25 | 2 tasks | 3 files |
 | Phase 02-day-boundary-completion P01 | 1 | 2 tasks | 2 files |
+| Phase 02-day-boundary-completion P02 | 231 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,9 @@ Recent decisions affecting current work:
 - [Phase 01-core-counter]: CompletionOverlay uses bg-black/80 and no auto-dismiss — completion moment is for the user to sit with, local overlayDismissed state (not store) is ephemeral UI state
 - [Phase 02-day-boundary-completion]: classifyDay uses mode from the record (not current settings) — historical records classify correctly after settings changes
 - [Phase 02-day-boundary-completion]: CompletionLevel is always derived at read time from raw counts — never stored anywhere
+- [Phase 02-day-boundary-completion]: Export archiveAndReset separately from useFajrRollover hook — enables direct unit testing without infinite timer loops from runAllTimersAsync
+- [Phase 02-day-boundary-completion]: adhan Coordinates/PrayerTimes mocks must use function constructors (not arrow functions) in vitest — enforced by vitest for new-able mocks
+- [Phase 02-day-boundary-completion]: cleanup() from @testing-library/react required in afterEach when tests share document-level event listeners across renderHook calls
 
 ### Pending Todos
 
@@ -102,6 +106,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-30T22:02:22.207Z
-Stopped at: Completed 02-day-boundary-completion-01-PLAN.md
+Last session: 2026-05-30T22:04:55.972Z
+Stopped at: Completed 02-day-boundary-completion-02-PLAN.md
 Resume file: None
