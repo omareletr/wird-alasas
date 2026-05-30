@@ -23,8 +23,8 @@
 - [x] **COUNT-06**: Each dhikr tracked independently (any order, any time)
 - [x] **COUNT-07**: User can choose Full mode (200/200/100/100) or Shortened mode (20/20/10/10) per session
 - [x] **COUNT-08**: Count progress for all 4 adhkar persists if app is closed; resumes from saved count on reopen
-- [ ] **COUNT-09**: Screen stays awake while the counter screen is active (Wake Lock API)
-- [ ] **COUNT-10**: Haptic feedback on each tap; visual pulse fallback for iOS (Vibration API unsupported on iOS Safari)
+- [x] **COUNT-09**: Screen stays awake while the counter screen is active (Wake Lock API)
+- [x] **COUNT-10**: Haptic feedback on each tap; visual pulse fallback for iOS (Vibration API unsupported on iOS Safari)
 
 ### Completion
 
@@ -95,8 +95,8 @@
 | COUNT-06 | Phase 1 | Complete |
 | COUNT-07 | Phase 1 | Complete |
 | COUNT-08 | Phase 1 | Complete |
-| COUNT-09 | Phase 1 | Pending |
-| COUNT-10 | Phase 1 | Pending |
+| COUNT-09 | Phase 1 | Complete |
+| COUNT-10 | Phase 1 | Complete |
 | COMP-03 | Phase 1 | Pending |
 | SET-01 | Phase 1 | Complete |
 | FOUND-02 | Phase 2 | Pending |
