@@ -1,14 +1,29 @@
-export default function Home() {
+"use client";
+import { useEffect } from "react";
+import { ADHKAR } from "@/lib/data/adhkar";
+import { DhikrCard } from "@/components/counter/DhikrCard";
+import { useSessionStore } from "@/lib/store/sessionStore";
+import { useSettingsStore } from "@/lib/store/settingsStore";
+
+export default function CounterPage() {
+  const { activeIndex, counts, mode, sessionStartedAt, setMode, setSessionStartedAt } =
+    useSessionStore();
+  const defaultMode = useSettingsStore((s) => s.defaultMode);
+
+  // Initialize a new session from defaultMode if no session is in progress
+  useEffect(() => {
+    if (sessionStartedAt === null) {
+      setMode(defaultMode);
+      setSessionStartedAt(Date.now());
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const entry = ADHKAR[activeIndex];
+  const count = counts[activeIndex];
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background text-foreground">
-      <div className="text-center space-y-4">
-        <h1 dir="rtl" lang="ar" className="text-4xl font-light tracking-wide">
-          وِرد الأساس
-        </h1>
-        <p className="text-sm text-muted-foreground uppercase tracking-widest">
-          coming soon
-        </p>
-      </div>
+    <main className="flex flex-col h-dvh w-full bg-black overflow-hidden">
+      <DhikrCard entry={entry} count={count} mode={mode} />
     </main>
   );
 }
