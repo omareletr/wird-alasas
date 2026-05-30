@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Naskh_Arabic } from "next/font/google";
 import "./globals.css";
 import { StoreHydration } from "@/components/StoreHydration";
 
@@ -13,6 +13,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const notoNaskhArabic = Noto_Naskh_Arabic({
+  subsets: ["arabic"],
+  weight: ["400", "700"],
+  variable: "--font-arabic",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "wird al-asas",
   description: "Complete your daily wird al-asas — four adhkar, every day.",
@@ -24,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={`dark ${notoNaskhArabic.variable}`}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
