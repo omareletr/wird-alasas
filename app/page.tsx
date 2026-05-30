@@ -10,6 +10,7 @@ import { useWakeLock } from "@/lib/hooks/useWakeLock";
 import { useFajrRollover } from "@/lib/hooks/useFajrRollover";
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
 import { DayCompletionBadge } from "@/components/counter/DayCompletionBadge";
+import { HistorySheet } from "@/components/history/HistorySheet";
 import { ADHKAR, getTarget } from "@/lib/data/adhkar";
 
 export default function CounterPage() {
@@ -40,14 +41,19 @@ export default function CounterPage() {
 
   return (
     <main className="relative flex flex-col h-dvh w-full bg-background overflow-hidden">
-      {/* Header: mode toggle on left, settings gear on right */}
+      {/* Header: left=[ModeToggle, HistorySheet], right=[DayCompletionBadge, SettingsSheet] */}
       <div
         className="flex items-center justify-between px-4 shrink-0"
         style={{ paddingTop: "env(safe-area-inset-top, 16px)" }}
       >
-        <ModeToggle />
-        <DayCompletionBadge />
-        <SettingsSheet />
+        <div className="flex items-center gap-1">
+          <ModeToggle />
+          <HistorySheet />
+        </div>
+        <div className="flex items-center gap-1">
+          <DayCompletionBadge />
+          <SettingsSheet />
+        </div>
       </div>
       {/* Counter deck fills remaining space */}
       <div className="flex-1 min-h-0">
