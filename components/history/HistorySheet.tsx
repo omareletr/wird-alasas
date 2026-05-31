@@ -10,7 +10,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { StreakDisplay } from "@/components/history/StreakDisplay";
-import { HeatmapCalendar, recordsToActivityData } from "@/components/history/HeatmapCalendar";
+import { HeatmapCalendar, HeatmapLegend, recordsToActivityData } from "@/components/history/HeatmapCalendar";
 import { DayDetailSheet } from "@/components/history/DayDetailSheet";
 import { getAllDailyRecords } from "@/lib/storage/idb";
 import { computeStreaks } from "@/lib/utils/streaks";
@@ -53,6 +53,7 @@ export function HistorySheet() {
                 data={activityData}
                 onDayClick={(date) => setSelectedDay(date)}
               />
+              {activityData.length > 0 && <HeatmapLegend />}
             </>
           )}
         </div>

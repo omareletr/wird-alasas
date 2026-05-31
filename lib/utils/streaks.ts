@@ -10,8 +10,9 @@ export interface StreakResult {
  * Computes current and longest streaks from an array of DailyRecord.
  *
  * Streak policy:
- * - A day is "active" if classifyDay returns "full" OR "partial".
- * - A "none" day (zero completions) breaks the streak.
+ * - A day is "active" if classifyDay returns anything other than "none"
+ *   (i.e. "partial", "one", "multi", or "full").
+ * - A "none" day (zero taps) breaks the streak.
  * - Current streak = unbroken run ending at the MOST RECENT active day key,
  *   not today. (If the user hasn't completed anything today, current streak
  *   ends on the last active day — no off-by-one.)

@@ -24,13 +24,26 @@ function noneRecord(dayKey: string): DailyRecord {
 }
 
 /**
+ * Helper: create a DailyRecord classified as "one".
+ * Only counts[0] = 200, rest = 0 → exactly 1 dhikr completed, classifyDay → "one".
+ */
+function oneRecord(dayKey: string): DailyRecord {
+  return {
+    dayKey,
+    counts: { 0: 200, 1: 0, 2: 0, 3: 0 } as Record<DhikrIndex, number>,
+    mode: "full",
+    completedAt: 0,
+  };
+}
+
+/**
  * Helper: create a DailyRecord classified as "partial".
- * Only counts[0] = 200, rest = 0 → 1 dhikr completed, classifyDay → "partial".
+ * counts[0] = 5 (some taps), rest = 0 → 0 dhikr completed, classifyDay → "partial".
  */
 function partialRecord(dayKey: string): DailyRecord {
   return {
     dayKey,
-    counts: { 0: 200, 1: 0, 2: 0, 3: 0 } as Record<DhikrIndex, number>,
+    counts: { 0: 5, 1: 0, 2: 0, 3: 0 } as Record<DhikrIndex, number>,
     mode: "full",
     completedAt: 0,
   };
@@ -75,11 +88,21 @@ describe("computeStreaks", () => {
     expect(computeStreaks(records)).toEqual({ current: 1, longest: 2 });
   });
 
-  // Case 6: "partial" day sustains streak
+  // Case 6: "partial" day sustains streak (taps only, 0 dhikr complete)
   it("partial day sustains streak — 3-day run with partial on day 2 -> { current: 3, longest: 3 }", () => {
     const records = [
       fullRecord("2026-05-28"),
       partialRecord("2026-05-29"),
+      fullRecord("2026-05-30"),
+    ];
+    expect(computeStreaks(records)).toEqual({ current: 3, longest: 3 });
+  });
+
+  // Case 6b: "one" day (1 dhikr complete) sustains streak
+  it("one-dhikr day sustains streak — 3-day run with one on day 2 -> { current: 3, longest: 3 }", () => {
+    const records = [
+      fullRecord("2026-05-28"),
+      oneRecord("2026-05-29"),
       fullRecord("2026-05-30"),
     ];
     expect(computeStreaks(records)).toEqual({ current: 3, longest: 3 });

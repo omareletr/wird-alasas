@@ -1,14 +1,12 @@
 /**
- * Wave 0 test scaffold for recordsToActivityData (HIST-03).
+ * Tests for recordsToActivityData (HeatmapCalendar).
  *
- * recordsToActivityData is created in plan 03-02 (Task 1).
- * These tests are intentionally RED during Wave 1 — they turn GREEN
- * after HeatmapCalendar.tsx exports recordsToActivityData.
- *
- * Activity levels:
- *   0 = none (zero completions)
- *   1 = partial (at least one dhikr completed, not all)
- *   2 = full (all dhikr completed)
+ * Level mapping (5 levels, 0–4):
+ *   none    → level=0, count=0  (no taps)
+ *   partial → level=1, count=1  (taps but 0 dhikr completed)
+ *   one     → level=2, count=2  (exactly 1 dhikr completed)
+ *   multi   → level=3, count=3  (2–3 dhikr completed)
+ *   full    → level=4, count=4  (all 4 dhikr completed)
  */
 
 import { describe, it, expect } from "vitest";
@@ -16,72 +14,74 @@ import { recordsToActivityData } from "@/components/history/HeatmapCalendar";
 import type { DailyRecord } from "@/lib/storage/schema";
 import type { DhikrIndex } from "@/lib/storage/schema";
 
-// Case A: none record (all counts 0) → Activity with level=0, count=0
-it("none record maps to level=0, count=0", () => {
-  const record: DailyRecord = {
-    dayKey: "2026-05-28",
-    counts: { 0: 0, 1: 0, 2: 0, 3: 0 } as Record<DhikrIndex, number>,
-    mode: "full",
+function makeRecord(
+  dayKey: string,
+  a: number,
+  b: number,
+  c: number,
+  d: number,
+  mode: "full" | "shortened" = "full"
+): DailyRecord {
+  return {
+    dayKey,
+    counts: { 0: a, 1: b, 2: c, 3: d } as Record<DhikrIndex, number>,
+    mode,
     completedAt: 0,
   };
-  const result = recordsToActivityData([record]);
+}
+
+it("none record (all zeros) maps to level=0, count=0", () => {
+  const result = recordsToActivityData([makeRecord("2026-05-28", 0, 0, 0, 0)]);
   expect(result).toHaveLength(1);
   expect(result[0]).toMatchObject({ date: "2026-05-28", level: 0, count: 0 });
 });
 
-// Case B: partial record (only counts[0] = 200, rest 0, mode="full") → level=1, count=1
-it("partial record (only first dhikr complete) maps to level=1, count=1", () => {
-  const record: DailyRecord = {
-    dayKey: "2026-05-29",
-    counts: { 0: 200, 1: 0, 2: 0, 3: 0 } as Record<DhikrIndex, number>,
-    mode: "full",
-    completedAt: 0,
-  };
-  const result = recordsToActivityData([record]);
+it("partial record (taps but 0 dhikr complete) maps to level=1, count=1", () => {
+  const result = recordsToActivityData([makeRecord("2026-05-28", 5, 0, 0, 0)]);
   expect(result).toHaveLength(1);
-  expect(result[0]).toMatchObject({ date: "2026-05-29", level: 1, count: 1 });
+  expect(result[0]).toMatchObject({ date: "2026-05-28", level: 1, count: 1 });
 });
 
-// Case C: full record (all targets met) → level=2, count=2
-it("full record (all dhikr complete) maps to level=2, count=2", () => {
-  const record: DailyRecord = {
-    dayKey: "2026-05-30",
-    counts: { 0: 200, 1: 200, 2: 100, 3: 100 } as Record<DhikrIndex, number>,
-    mode: "full",
-    completedAt: 0,
-  };
-  const result = recordsToActivityData([record]);
+it("one record (exactly 1 dhikr complete) maps to level=2, count=2", () => {
+  const result = recordsToActivityData([makeRecord("2026-05-29", 200, 0, 0, 0)]);
   expect(result).toHaveLength(1);
-  expect(result[0]).toMatchObject({ date: "2026-05-30", level: 2, count: 2 });
+  expect(result[0]).toMatchObject({ date: "2026-05-29", level: 2, count: 2 });
 });
 
-// Case D: output is sorted ascending by date for 3 records with different dayKeys
+it("multi record (2 dhikr complete) maps to level=3, count=3", () => {
+  const result = recordsToActivityData([makeRecord("2026-05-29", 200, 200, 0, 0)]);
+  expect(result).toHaveLength(1);
+  expect(result[0]).toMatchObject({ date: "2026-05-29", level: 3, count: 3 });
+});
+
+it("multi record (3 dhikr complete) maps to level=3, count=3", () => {
+  const result = recordsToActivityData([makeRecord("2026-05-29", 200, 200, 100, 0)]);
+  expect(result).toHaveLength(1);
+  expect(result[0]).toMatchObject({ date: "2026-05-29", level: 3, count: 3 });
+});
+
+it("full record (all 4 dhikr complete) maps to level=4, count=4", () => {
+  const result = recordsToActivityData([makeRecord("2026-05-30", 200, 200, 100, 100)]);
+  expect(result).toHaveLength(1);
+  expect(result[0]).toMatchObject({ date: "2026-05-30", level: 4, count: 4 });
+});
+
 describe("recordsToActivityData", () => {
-  it("output sorted ascending by date for 3 records with different dayKeys", () => {
-    const records: DailyRecord[] = [
-      {
-        dayKey: "2026-05-30",
-        counts: { 0: 200, 1: 200, 2: 100, 3: 100 } as Record<DhikrIndex, number>,
-        mode: "full",
-        completedAt: 0,
-      },
-      {
-        dayKey: "2026-05-28",
-        counts: { 0: 0, 1: 0, 2: 0, 3: 0 } as Record<DhikrIndex, number>,
-        mode: "full",
-        completedAt: 0,
-      },
-      {
-        dayKey: "2026-05-29",
-        counts: { 0: 200, 1: 0, 2: 0, 3: 0 } as Record<DhikrIndex, number>,
-        mode: "full",
-        completedAt: 0,
-      },
+  it("output sorted ascending by date", () => {
+    const records = [
+      makeRecord("2026-05-30", 200, 200, 100, 100),
+      makeRecord("2026-05-28", 0, 0, 0, 0),
+      makeRecord("2026-05-29", 200, 0, 0, 0),
     ];
     const result = recordsToActivityData(records);
     expect(result).toHaveLength(3);
     expect(result[0].date).toBe("2026-05-28");
     expect(result[1].date).toBe("2026-05-29");
     expect(result[2].date).toBe("2026-05-30");
+  });
+
+  it("shortened mode — all at shortened targets → level=4", () => {
+    const result = recordsToActivityData([makeRecord("2026-05-28", 20, 20, 10, 10, "shortened")]);
+    expect(result[0]).toMatchObject({ level: 4, count: 4 });
   });
 });

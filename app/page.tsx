@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "motion/react";
 import { DhikrDeck } from "@/components/counter/DhikrDeck";
-import { ModeToggle } from "@/components/counter/ModeToggle";
 import { ThemeToggle } from "@/components/counter/ThemeToggle";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
 import { CompletionOverlay } from "@/components/counter/CompletionOverlay";
@@ -67,7 +66,6 @@ export default function CounterPage() {
         style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 20px)" }}
       >
         <div className="flex items-center gap-0">
-          <ModeToggle />
           <HistorySheet />
         </div>
         <div className="flex items-center justify-center">

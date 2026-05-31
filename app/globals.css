@@ -144,12 +144,14 @@
 ::view-transition-new(root) {
   will-change: clip-path;
   clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 50%));
-  animation: vt-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: vt-reveal 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes vt-reveal {
   to {
-    clip-path: circle(100vmax at var(--vt-x, 50%) var(--vt-y, 50%));
+    /* 150vmax guarantees coverage even when the click origin is at a corner —
+       the worst case (square screen, click at corner) needs √2×100vmax ≈ 141.4vmax */
+    clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 50%));
   }
 }
 

@@ -92,13 +92,13 @@ export function SettingsSheet() {
               <div className="flex items-center gap-3">
                 <RadioGroupItem value="full" id="mode-full" />
                 <Label htmlFor="mode-full" className="text-sm font-sans text-foreground cursor-pointer">
-                  Full — 200 · 200 · 100 · 100
+                  Full (200 · 200 · 100 · 100)
                 </Label>
               </div>
               <div className="flex items-center gap-3">
                 <RadioGroupItem value="shortened" id="mode-shortened" />
                 <Label htmlFor="mode-shortened" className="text-sm font-sans text-foreground cursor-pointer">
-                  Short — 20 · 20 · 10 · 10
+                  Short (20 · 20 · 10 · 10)
                 </Label>
               </div>
             </RadioGroup>

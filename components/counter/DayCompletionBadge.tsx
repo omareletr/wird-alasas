@@ -21,7 +21,7 @@ export function DayCompletionBadge() {
 
   return (
     <span className="text-[10px] font-sans tracking-wide uppercase text-accent border border-accent/40 px-2 py-0.5 rounded-full">
-      partial
+      Partial Completion
     </span>
   );
 }
