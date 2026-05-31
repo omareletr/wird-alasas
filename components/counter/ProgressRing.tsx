@@ -26,7 +26,7 @@ export function ProgressRing({
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}
-      style={{ width: "min(260px, calc(100vw - 64px))", height: "min(260px, calc(100vw - 64px))" }}
+      style={{ width: "min(220px, calc(100vw - 64px))", height: "min(220px, calc(100vw - 64px))" }}
       aria-hidden
     >
       {/* Track ring */}

@@ -38,26 +38,21 @@ export function DhikrCard({ entry, count, mode, dhikrIndex }: DhikrCardProps) {
   }, [showPulse]);
 
   return (
-    <div className="relative h-full w-full select-none">
-      {/* Reset button — sits just above the progress ring */}
-      <div
-        className="absolute left-1/2 -translate-x-1/2 flex justify-center"
-        style={{ top: "calc(40% - 182px)" }}
-      >
-        <ResetButton dhikrIndex={dhikrIndex} />
-      </div>
+    <div className="flex flex-col h-full w-full select-none px-8">
+      {/* Ring + text — share all remaining space, centered together */}
+      <div className="flex-1 flex flex-col items-center justify-center gap-5 min-h-0">
+        {/* Reset button sits just above the ring with breathing room */}
+        <div className="flex justify-center shrink-0">
+          <ResetButton dhikrIndex={dhikrIndex} />
+        </div>
 
-      {/* Progress ring — center pinned at 40% of card height on every card */}
-      <div
-        className="absolute left-1/2 -translate-x-1/2"
-        style={{ top: "calc(40% - 130px)" }}
-      >
-        <div className="relative flex items-center justify-center">
-          <ProgressRing count={count} target={target} size={260} strokeWidth={4} showPulse={showPulse} />
+        {/* Progress ring */}
+        <div className="relative flex items-center justify-center shrink-0">
+          <ProgressRing count={count} target={target} size={220} strokeWidth={4} showPulse={showPulse} />
           <div className="absolute flex flex-col items-center gap-1">
             <motion.span
               key={count}
-              className="text-5xl font-mono tabular-nums text-foreground leading-none"
+              className="text-4xl font-mono tabular-nums text-foreground leading-none"
               initial={{ scale: 1.15 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 400, damping: 20 }}
@@ -69,19 +64,15 @@ export function DhikrCard({ entry, count, mode, dhikrIndex }: DhikrCardProps) {
             </span>
           </div>
         </div>
-      </div>
 
-      {/* Text — always 32px below ring bottom; text may vary, ring does not */}
-      <div
-        className="absolute left-0 right-0 flex flex-col items-center gap-6 px-8"
-        style={{ top: "calc(40% + 162px)" }}
-      >
+        {/* Text block */}
+        <div className="flex flex-col items-center gap-4 w-full">
         {/* Arabic text */}
         <p
           dir="rtl"
           lang="ar"
-          className="text-center text-3xl text-foreground"
-          style={{ fontFamily: "var(--font-arabic)", lineHeight: 2.2 }}
+          className="text-center text-2xl text-foreground"
+          style={{ fontFamily: "var(--font-arabic)", lineHeight: 2.0 }}
         >
           {entry.arabic}
         </p>
@@ -95,6 +86,7 @@ export function DhikrCard({ entry, count, mode, dhikrIndex }: DhikrCardProps) {
         <p className="text-center text-[12px] text-muted-foreground/70 leading-relaxed max-w-xs" dir="ltr">
           {entry.translation}
         </p>
+        </div>
       </div>
     </div>
   );
