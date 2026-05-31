@@ -1,6 +1,6 @@
 "use client";
-import { motion, useAnimation } from "motion/react";
-import { useCallback } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { useState, useCallback } from "react";
 import { ADHKAR } from "@/lib/data/adhkar";
 import { DhikrCard } from "@/components/counter/DhikrCard";
 import { TapSurface } from "@/components/counter/TapSurface";
@@ -10,15 +10,21 @@ import type { DhikrIndex } from "@/lib/storage/schema";
 const SWIPE_OFFSET_THRESHOLD = 80; // px — horizontal drag before snapping
 const SWIPE_VELOCITY_THRESHOLD = 500; // px/s — fast flick counts even at short distance
 
+const slideVariants = {
+  enter: (dir: number) => ({ x: dir > 0 ? "100%" : "-100%" }),
+  center: { x: 0 },
+  exit: (dir: number) => ({ x: dir > 0 ? "-100%" : "100%" }),
+};
+
 export function DhikrDeck() {
   const activeIndex = useSessionStore((s) => s.activeIndex);
   const setActiveIndex = useSessionStore((s) => s.setActiveIndex);
   const counts = useSessionStore((s) => s.counts);
   const mode = useSessionStore((s) => s.mode);
-  const controls = useAnimation();
+  const [direction, setDirection] = useState<1 | -1>(1);
 
   const handleDragEnd = useCallback(
-    async (
+    (
       _e: PointerEvent,
       info: { offset: { x: number }; velocity: { x: number } }
     ) => {
@@ -30,39 +36,58 @@ export function DhikrDeck() {
         offset.x > SWIPE_OFFSET_THRESHOLD ||
         velocity.x > SWIPE_VELOCITY_THRESHOLD;
 
-      let newIndex = activeIndex;
       if (swipedLeft && activeIndex < ADHKAR.length - 1) {
-        newIndex = (activeIndex + 1) as DhikrIndex;
+        setDirection(1);
+        setActiveIndex((activeIndex + 1) as DhikrIndex);
       } else if (swipedRight && activeIndex > 0) {
-        newIndex = (activeIndex - 1) as DhikrIndex;
+        setDirection(-1);
+        setActiveIndex((activeIndex - 1) as DhikrIndex);
       }
-
-      // Snap back to center regardless (dragMomentum:false + this animate ensures clean state)
-      await controls.start({ x: 0, transition: { duration: 0.1 } });
-      if (newIndex !== activeIndex) {
-        setActiveIndex(newIndex);
-      }
+      // No else: dragConstraints spring the card back to x:0 automatically
     },
-    [activeIndex, setActiveIndex, controls]
+    [activeIndex, setActiveIndex]
   );
 
   const entry = ADHKAR[activeIndex];
   const count = counts[activeIndex];
 
   return (
-    <motion.div
-      drag="x"
-      dragConstraints={{ left: 0, right: 0 }}
-      dragElastic={0.15}
-      dragMomentum={false}
-      onDragEnd={handleDragEnd}
-      animate={controls}
-      className="w-full h-full"
-      style={{ touchAction: "pan-y" }} // allow vertical scroll; handle horizontal drag
-    >
-      <TapSurface dhikrIndex={activeIndex}>
-        <DhikrCard entry={entry} count={count} mode={mode} />
-      </TapSurface>
-    </motion.div>
+    <div className="flex flex-col w-full h-full">
+      <div className="flex-1 relative overflow-hidden">
+        <AnimatePresence initial={false} custom={direction}>
+          <motion.div
+            key={activeIndex}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ type: "spring", stiffness: 300, damping: 30, mass: 0.8 }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.15}
+            dragMomentum={false}
+            onDragEnd={handleDragEnd}
+            className="absolute inset-0"
+            style={{ touchAction: "pan-y" }}
+          >
+            <TapSurface dhikrIndex={activeIndex}>
+              <DhikrCard entry={entry} count={count} mode={mode} />
+            </TapSurface>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <div className="flex items-center justify-center gap-2 pb-6 shrink-0">
+        {ADHKAR.map((_, i) => (
+          <motion.div
+            key={i}
+            className="rounded-full bg-foreground"
+            animate={{ opacity: i === activeIndex ? 1 : 0.25 }}
+            transition={{ duration: 0.2 }}
+            style={{ width: 6, height: 6 }}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
