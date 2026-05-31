@@ -61,11 +61,11 @@ export function ProgressRing({
           r={radius}
           fill="none"
           stroke="#22c55e"
-          strokeWidth={strokeWidth}
+          strokeWidth={strokeWidth > 1 ? strokeWidth - 1 : strokeWidth}
           strokeLinecap="round"
-          initial={{ opacity: 0.65, scale: 1 }}
-          animate={{ opacity: 0, scale: 1.18 }}
-          transition={{ duration: 0.55, ease: "easeOut" }}
+          initial={{ opacity: 0.35, scale: 1 }}
+          animate={{ opacity: 0, scale: 1.06 }}
+          transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
           style={{ originX: "50%", originY: "50%" }}
         />
       )}

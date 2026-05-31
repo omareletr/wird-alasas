@@ -130,3 +130,33 @@
     @apply font-sans;
   }
 }
+
+/* ── Theme-switch view transition ──────────────────────────────────────── */
+
+/* Suppress the browser's default cross-fade */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* New theme revealed through a circle growing from the tap point */
+::view-transition-new(root) {
+  will-change: clip-path;
+  clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 50%));
+  animation: vt-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes vt-reveal {
+  to {
+    clip-path: circle(100vmax at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.01ms !important;
+  }
+}

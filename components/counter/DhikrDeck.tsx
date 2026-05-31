@@ -72,7 +72,7 @@ export function DhikrDeck() {
             style={{ touchAction: "pan-y" }}
           >
             <TapSurface dhikrIndex={activeIndex}>
-              <DhikrCard entry={entry} count={count} mode={mode} />
+              <DhikrCard entry={entry} count={count} mode={mode} dhikrIndex={activeIndex} />
             </TapSurface>
           </motion.div>
         </AnimatePresence>

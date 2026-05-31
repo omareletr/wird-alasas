@@ -2,17 +2,20 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { ProgressRing } from "@/components/counter/ProgressRing";
+import { ResetButton } from "@/components/counter/ResetButton";
 import type { DhikrEntry } from "@/lib/data/adhkar";
 import { getTarget } from "@/lib/data/adhkar";
 import { useHaptic } from "@/lib/hooks/useHaptic";
+import type { DhikrIndex } from "@/lib/storage/schema";
 
 interface DhikrCardProps {
   entry: DhikrEntry;
   count: number;
   mode: "full" | "shortened";
+  dhikrIndex: DhikrIndex;
 }
 
-export function DhikrCard({ entry, count, mode }: DhikrCardProps) {
+export function DhikrCard({ entry, count, mode, dhikrIndex }: DhikrCardProps) {
   const target = getTarget(entry, mode);
   const vibrate = useHaptic();
   const prevCount = useRef(count);
@@ -30,12 +33,20 @@ export function DhikrCard({ entry, count, mode }: DhikrCardProps) {
 
   useEffect(() => {
     if (!showPulse) return;
-    const id = setTimeout(() => setShowPulse(false), 700);
+    const id = setTimeout(() => setShowPulse(false), 1100);
     return () => clearTimeout(id);
   }, [showPulse]);
 
   return (
     <div className="relative h-full w-full select-none">
+      {/* Reset button — sits just above the progress ring */}
+      <div
+        className="absolute left-1/2 -translate-x-1/2 flex justify-center"
+        style={{ top: "calc(40% - 182px)" }}
+      >
+        <ResetButton dhikrIndex={dhikrIndex} />
+      </div>
+
       {/* Progress ring — center pinned at 40% of card height on every card */}
       <div
         className="absolute left-1/2 -translate-x-1/2"
