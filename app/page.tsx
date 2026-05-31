@@ -64,7 +64,7 @@ export default function CounterPage() {
       {/* Header: three-column — left controls / app name / right controls */}
       <div
         className="grid grid-cols-3 items-center px-5 pb-3 shrink-0"
-        style={{ paddingTop: "env(safe-area-inset-top, 20px)" }}
+        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 20px)" }}
       >
         <div className="flex items-center gap-0">
           <ModeToggle />

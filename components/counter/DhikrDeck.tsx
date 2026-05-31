@@ -77,7 +77,10 @@ export function DhikrDeck() {
           </motion.div>
         </AnimatePresence>
       </div>
-      <div className="flex items-center justify-center gap-2 pb-6 shrink-0">
+      <div
+        className="flex items-center justify-center gap-2 shrink-0"
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 24px)" }}
+      >
         {ADHKAR.map((_, i) => (
           <motion.div
             key={i}

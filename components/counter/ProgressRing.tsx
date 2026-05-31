@@ -6,6 +6,7 @@ interface ProgressRingProps {
   target: number;
   size?: number;
   strokeWidth?: number;
+  showPulse?: boolean;
 }
 
 export function ProgressRing({
@@ -13,6 +14,7 @@ export function ProgressRing({
   target,
   size = 280,
   strokeWidth = 6,
+  showPulse = false,
 }: ProgressRingProps) {
   const radius = (size - strokeWidth) / 2;
   const center = size / 2;
@@ -42,29 +44,29 @@ export function ProgressRing({
         cy={center}
         r={radius}
         fill="none"
-        stroke={completed ? "var(--foreground)" : "var(--accent)"}
+        stroke={completed ? "#22c55e" : "var(--accent)"}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: progress }}
-        transition={{ duration: 0.15, ease: "easeOut" }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         style={{ rotate: -90, originX: "50%", originY: "50%" }}
       />
       {/* Completion glow pulse */}
-      {completed && (
+      {showPulse && (
         <motion.circle
           key="complete-pulse"
           cx={center}
           cy={center}
           r={radius}
           fill="none"
-          stroke="var(--foreground)"
-          strokeWidth={strokeWidth * 2.5}
+          stroke="#22c55e"
+          strokeWidth={strokeWidth}
           strokeLinecap="round"
-          initial={{ opacity: 0.3, strokeWidth: strokeWidth * 2.5 }}
-          animate={{ opacity: 0, strokeWidth: strokeWidth * 5 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          style={{ rotate: -90, originX: "50%", originY: "50%" }}
+          initial={{ opacity: 0.65, scale: 1 }}
+          animate={{ opacity: 0, scale: 1.18 }}
+          transition={{ duration: 0.55, ease: "easeOut" }}
+          style={{ originX: "50%", originY: "50%" }}
         />
       )}
     </svg>
