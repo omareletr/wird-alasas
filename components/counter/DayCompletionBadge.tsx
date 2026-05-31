@@ -30,7 +30,7 @@ export function DayCompletionBadge() {
           </motion.span>
         ) : (
           <motion.span
-            key={level}
+            key="partial"
             className="inline-block whitespace-nowrap text-[10px] font-sans tracking-wide uppercase text-accent border border-accent/40 px-2 py-0.5 rounded-full"
             {...badgeAnimation}
           >
