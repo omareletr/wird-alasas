@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono, IBM_Plex_Sans, Scheherazade_New } from "next/font/google";
+import { Amiri, Geist_Mono, IBM_Plex_Sans, Scheherazade_New } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { StoreHydration } from "@/components/StoreHydration";
@@ -24,18 +24,28 @@ const scheherazadeNew = Scheherazade_New({
   display: "swap",
 });
 
+const amiri = Amiri({
+  subsets: ["arabic"],
+  weight: ["400"],
+  variable: "--font-amiri",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "wird al-asas",
   description: "Complete your daily wird al-asas — four adhkar, every day.",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "black",
     title: "wird",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0c0c0c",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0c0c0c" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f0e6" },
+  ],
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -47,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${scheherazadeNew.variable} ${geistMono.variable} ${ibmPlexSans.variable}`}>
+      <html lang="en" suppressHydrationWarning className={`${scheherazadeNew.variable} ${geistMono.variable} ${ibmPlexSans.variable} ${amiri.variable}`}>
       <head>
         {/* Prevent flash of wrong theme on load */}
         <script

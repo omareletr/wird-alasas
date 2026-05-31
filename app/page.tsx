@@ -6,7 +6,6 @@ import { ThemeToggle } from "@/components/counter/ThemeToggle";
 import { SettingsSheet } from "@/components/settings/SettingsSheet";
 import { CompletionOverlay } from "@/components/counter/CompletionOverlay";
 import { useSessionStore } from "@/lib/store/sessionStore";
-import { useSettingsStore } from "@/lib/store/settingsStore";
 import { useWakeLock } from "@/lib/hooks/useWakeLock";
 import { useFajrRollover } from "@/lib/hooks/useFajrRollover";
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
@@ -27,9 +26,8 @@ function wasSessionAlreadyComplete(): boolean {
 }
 
 export default function CounterPage() {
-  const { sessionStartedAt, setMode, setSessionStartedAt, counts, mode } =
+  const { sessionStartedAt, setSessionStartedAt, counts, mode } =
     useSessionStore();
-  const defaultMode = useSettingsStore((s) => s.defaultMode);
 
   // Initialize dismissed if session was already complete when the page loaded,
   // so reloading a finished session doesn't re-show the overlay.
@@ -41,7 +39,6 @@ export default function CounterPage() {
 
   useEffect(() => {
     if (sessionStartedAt === null) {
-      setMode(defaultMode);
       setSessionStartedAt(Date.now());
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

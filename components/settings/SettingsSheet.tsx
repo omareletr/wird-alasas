@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Settings } from "lucide-react";
 import { useSettingsStore } from "@/lib/store/settingsStore";
+import { useSessionStore } from "@/lib/store/sessionStore";
 import { useGeolocation } from "@/lib/hooks/useGeolocation";
 
 function geoStatusMessage(status: ReturnType<typeof useGeolocation>["status"]): string {
@@ -29,8 +30,8 @@ function geoStatusColor(status: ReturnType<typeof useGeolocation>["status"]): st
 }
 
 export function SettingsSheet() {
-  const defaultMode = useSettingsStore((s) => s.defaultMode);
-  const setDefaultMode = useSettingsStore((s) => s.setDefaultMode);
+  const mode = useSessionStore((s) => s.mode);
+  const setMode = useSessionStore((s) => s.setMode);
   const location = useSettingsStore((s) => s.location);
   const setLocation = useSettingsStore((s) => s.setLocation);
 
@@ -82,11 +83,11 @@ export function SettingsSheet() {
           {/* Mode section */}
           <div>
             <p className="text-[10px] font-sans tracking-widest uppercase text-muted-foreground/70 mb-4">
-              Default mode
+              Mode
             </p>
             <RadioGroup
-              value={defaultMode}
-              onValueChange={(v) => setDefaultMode(v as "full" | "shortened")}
+              value={mode}
+              onValueChange={(v) => setMode(v as "full" | "shortened")}
               className="space-y-3"
             >
               <div className="flex items-center gap-3">

@@ -20,7 +20,6 @@ export interface ActiveSession {
 
 /** User preferences persisted to localStorage under "wird-settings". */
 export interface UserSettings {
-  defaultMode: "full" | "shortened";
   location: { latitude: number; longitude: number } | null;
 }
 

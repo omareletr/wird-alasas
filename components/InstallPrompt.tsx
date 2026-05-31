@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X, Share, PlusSquare } from "lucide-react";
+import { X } from "lucide-react";
 
 const STORAGE_KEY = "install-prompt-dismissed";
 
@@ -20,7 +20,6 @@ interface BeforeInstallPromptEvent extends Event {
 
 export function InstallPrompt() {
   const [show, setShow] = useState(false);
-  const [isIOSDevice, setIsIOSDevice] = useState(false);
   const [deferredPrompt, setDeferredPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
 
@@ -31,13 +30,8 @@ export function InstallPrompt() {
 
     if (isStandalone() || localStorage.getItem(STORAGE_KEY)) return;
 
-    const ios = isIOS();
-    setIsIOSDevice(ios);
-
-    if (ios) {
-      setShow(true);
-      return;
-    }
+    // iOS is handled by IOSInstallCTA in DhikrDeck — skip here to prevent double CTA
+    if (isIOS()) return;
 
     const handler = (e: Event) => {
       e.preventDefault();
@@ -59,6 +53,7 @@ export function InstallPrompt() {
     await deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     if (outcome === "accepted") {
+      localStorage.setItem(STORAGE_KEY, "1");
       setShow(false);
     }
     setDeferredPrompt(null);
@@ -73,20 +68,10 @@ export function InstallPrompt() {
     >
       <div className="flex-1 min-w-0">
         <p className="text-[11px] font-sans tracking-[0.15em] uppercase text-foreground">Add to Home Screen</p>
-        {isIOSDevice ? (
-          <p className="text-[10px] font-sans text-muted-foreground mt-1 flex items-center gap-1 flex-wrap leading-relaxed">
-            Tap <Share className="inline w-3 h-3 shrink-0" /> then
-            <span className="inline-flex items-center gap-0.5">
-              <PlusSquare className="inline w-3 h-3 shrink-0" /> Add to Home Screen
-            </span>
-            to keep your streak safe.
-          </p>
-        ) : (
-          <p className="text-[10px] font-sans text-muted-foreground mt-1 leading-relaxed">
-            Install to protect your history from browser data eviction.
-          </p>
-        )}
-        {!isIOSDevice && deferredPrompt && (
+        <p className="text-[10px] font-sans text-muted-foreground mt-1 leading-relaxed">
+          Install to protect your history from browser data eviction.
+        </p>
+        {deferredPrompt && (
           <button
             onClick={install}
             className="mt-2 text-[10px] font-sans tracking-widest uppercase text-accent hover:text-accent/80 transition-colors"

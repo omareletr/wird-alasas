@@ -2,10 +2,12 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useCallback } from "react";
 import { ADHKAR } from "@/lib/data/adhkar";
+import { BismillahHeader } from "@/components/counter/BismillahHeader";
 import { DhikrCard } from "@/components/counter/DhikrCard";
 import { TapSurface } from "@/components/counter/TapSurface";
 import { useSessionStore } from "@/lib/store/sessionStore";
 import type { DhikrIndex } from "@/lib/storage/schema";
+import { IOSInstallCTA } from "@/components/counter/IOSInstallCTA";
 
 const SWIPE_OFFSET_THRESHOLD = 80; // px — horizontal drag before snapping
 const SWIPE_VELOCITY_THRESHOLD = 500; // px/s — fast flick counts even at short distance
@@ -52,7 +54,11 @@ export function DhikrDeck() {
   const count = counts[activeIndex];
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="relative flex flex-col w-full h-full">
+      {/* Bismillah header — part of the flow, above the swipeable card area */}
+      <div className="flex justify-center shrink-0 pt-5 pb-2 pointer-events-none">
+        <BismillahHeader />
+      </div>
       <div className="flex-1 relative overflow-hidden">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
@@ -77,6 +83,7 @@ export function DhikrDeck() {
           </motion.div>
         </AnimatePresence>
       </div>
+      <IOSInstallCTA />
       <div
         className="flex items-center justify-center gap-2 shrink-0"
         style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 24px)" }}

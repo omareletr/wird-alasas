@@ -5,7 +5,6 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import type { UserSettings } from "@/lib/storage/schema";
 
 interface SettingsActions {
-  setDefaultMode(mode: "full" | "shortened"): void;
   setLocation(loc: { latitude: number; longitude: number } | null): void;
 }
 
@@ -15,13 +14,9 @@ export const useSettingsStore = create<SettingsStore>()(
   persist(
     (set) => ({
       // Default state
-      defaultMode: "full",
       location: null,
 
       // Actions
-      setDefaultMode(mode) {
-        set({ defaultMode: mode });
-      },
       setLocation(loc) {
         set({ location: loc });
       },
@@ -30,7 +25,11 @@ export const useSettingsStore = create<SettingsStore>()(
       name: "wird-settings",
       storage: createJSONStorage(() => localStorage),
       skipHydration: true,
-      version: 1,
+      version: 2,
+      // v2: defaultMode removed. Strip all stale keys and keep only location.
+      migrate: (persisted: unknown) => ({
+        location: (persisted as Record<string, unknown>)?.location ?? null,
+      }),
     }
   )
 );

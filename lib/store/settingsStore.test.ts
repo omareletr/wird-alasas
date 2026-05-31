@@ -2,22 +2,22 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { useSettingsStore } from "@/lib/store/settingsStore";
 
 beforeEach(() => {
-  useSettingsStore.setState({ defaultMode: "full", location: null });
+  useSettingsStore.setState({ location: null });
 });
 
-describe("settingsStore.setDefaultMode", () => {
-  it("initial defaultMode is 'full'", () => {
-    expect(useSettingsStore.getState().defaultMode).toBe("full");
+describe("settingsStore.setLocation", () => {
+  it("initial location is null", () => {
+    expect(useSettingsStore.getState().location).toBeNull();
   });
 
-  it("setDefaultMode('shortened') changes defaultMode to 'shortened'", () => {
-    useSettingsStore.getState().setDefaultMode("shortened");
-    expect(useSettingsStore.getState().defaultMode).toBe("shortened");
+  it("setLocation stores coordinates", () => {
+    useSettingsStore.getState().setLocation({ latitude: 21.4225, longitude: 39.8262 });
+    expect(useSettingsStore.getState().location).toEqual({ latitude: 21.4225, longitude: 39.8262 });
   });
 
-  it("setDefaultMode('full') after shortened reverts to 'full'", () => {
-    useSettingsStore.getState().setDefaultMode("shortened");
-    useSettingsStore.getState().setDefaultMode("full");
-    expect(useSettingsStore.getState().defaultMode).toBe("full");
+  it("setLocation(null) clears location", () => {
+    useSettingsStore.getState().setLocation({ latitude: 21.4225, longitude: 39.8262 });
+    useSettingsStore.getState().setLocation(null);
+    expect(useSettingsStore.getState().location).toBeNull();
   });
 });

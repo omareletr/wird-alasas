@@ -1,12 +1,27 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { RotateCcw } from "lucide-react";
-import { useIsPresent } from "motion/react";
+import { RotateCcw, Check } from "lucide-react";
+import { motion, AnimatePresence, useIsPresent } from "motion/react";
 import { useSessionStore } from "@/lib/store/sessionStore";
 import { useHaptic } from "@/lib/hooks/useHaptic";
 import type { DhikrIndex } from "@/lib/storage/schema";
 
 const AUTO_CANCEL_MS = 2500;
+const DONE_MS = 1400;
+
+const pillAnimation = {
+  initial: { opacity: 0, scale: 0.92, y: 3 },
+  animate: {
+    opacity: 1, scale: 1, y: 0,
+    transition: { type: "spring", stiffness: 500, damping: 28 },
+  },
+  exit: {
+    opacity: 0, scale: 0.95,
+    transition: { duration: 0.08, ease: "easeIn" },
+  },
+};
+
+type State = "idle" | "confirming" | "done";
 
 interface ResetButtonProps {
   dhikrIndex: DhikrIndex;
@@ -16,68 +31,88 @@ export function ResetButton({ dhikrIndex }: ResetButtonProps) {
   const resetCount = useSessionStore((s) => s.resetCount);
   const vibrate = useHaptic();
   const isPresent = useIsPresent();
-  const [confirming, setConfirming] = useState(false);
-  const cancelTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [state, setState] = useState<State>("idle");
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const clearCancel = useCallback(() => {
-    if (cancelTimer.current) {
-      clearTimeout(cancelTimer.current);
-      cancelTimer.current = null;
+  const clearTimer = useCallback(() => {
+    if (timer.current) {
+      clearTimeout(timer.current);
+      timer.current = null;
     }
   }, []);
 
-  // Auto-cancel when confirming state expires; also cleans up on unmount
   useEffect(() => {
-    if (!confirming) return;
-    // Explicitly cancel any prior timer before arming a new one
-    clearCancel();
-    cancelTimer.current = setTimeout(() => setConfirming(false), AUTO_CANCEL_MS);
-    return clearCancel;
-  }, [confirming, clearCancel]);
+    if (state === "confirming") {
+      clearTimer();
+      timer.current = setTimeout(() => setState("idle"), AUTO_CANCEL_MS);
+    } else if (state === "done") {
+      clearTimer();
+      timer.current = setTimeout(() => setState("idle"), DONE_MS);
+    }
+    return clearTimer;
+  }, [state, clearTimer]);
 
-  const handlePointerDown = useCallback(
-    (e: React.PointerEvent) => {
-      // Prevent the underlying TapSurface from receiving this pointer event
-      e.stopPropagation();
-    },
-    []
-  );
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    e.stopPropagation();
+  }, []);
 
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      // Guard: ignore if this card is in the process of being removed
       if (!isPresent) return;
-      if (!confirming) {
-        setConfirming(true);
+      if (state === "idle") {
+        setState("confirming");
         vibrate(10);
-      } else {
-        clearCancel();
-        setConfirming(false);
+      } else if (state === "confirming") {
+        clearTimer();
         resetCount(dhikrIndex);
+        setState("done");
         vibrate(25);
       }
     },
-    [confirming, clearCancel, dhikrIndex, isPresent, resetCount, vibrate]
+    [state, clearTimer, dhikrIndex, isPresent, resetCount, vibrate]
   );
 
   return (
-    <button
-      aria-label={confirming ? "Confirm reset" : "Reset counter"}
-      onPointerDown={handlePointerDown}
-      onClick={handleClick}
-      className={[
-        "flex items-center gap-1.5 px-3 py-1.5 rounded-full",
-        "text-[11px] font-sans tracking-widest uppercase transition-all duration-200",
-        "select-none",
-        confirming
-          ? "bg-accent/15 text-accent"
-          : "text-muted-foreground/40 hover:text-muted-foreground/70",
-      ].join(" ")}
-      style={{ WebkitTapHighlightColor: "transparent" }}
-    >
-      <RotateCcw size={12} strokeWidth={2} />
-      <span>{confirming ? "Confirm reset?" : "Reset"}</span>
-    </button>
+    <AnimatePresence mode="wait">
+      {state === "confirming" && (
+        <motion.button
+          key="confirming"
+          {...pillAnimation}
+          aria-label="Confirm reset"
+          onPointerDown={handlePointerDown}
+          onClick={handleClick}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-sans tracking-widest uppercase select-none bg-accent/15 text-accent"
+          style={{ WebkitTapHighlightColor: "transparent" }}
+        >
+          <RotateCcw size={12} strokeWidth={2} />
+          <span>Confirm reset?</span>
+        </motion.button>
+      )}
+      {state === "done" && (
+        <motion.span
+          key="done"
+          {...pillAnimation}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-sans tracking-widest uppercase select-none text-green-500 border border-green-500/40"
+        >
+          <Check size={12} strokeWidth={2.5} />
+          <span>Reset</span>
+        </motion.span>
+      )}
+      {state === "idle" && (
+        <motion.button
+          key="idle"
+          {...pillAnimation}
+          aria-label="Reset counter"
+          onPointerDown={handlePointerDown}
+          onClick={handleClick}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-sans tracking-widest uppercase select-none text-muted-foreground/40 hover:text-muted-foreground/70"
+          style={{ WebkitTapHighlightColor: "transparent" }}
+        >
+          <RotateCcw size={12} strokeWidth={2} />
+          <span>Reset</span>
+        </motion.button>
+      )}
+    </AnimatePresence>
   );
 }

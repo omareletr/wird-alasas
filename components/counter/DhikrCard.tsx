@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { ProgressRing } from "@/components/counter/ProgressRing";
 import { ResetButton } from "@/components/counter/ResetButton";
 import type { DhikrEntry } from "@/lib/data/adhkar";
@@ -41,13 +41,21 @@ export function DhikrCard({ entry, count, mode, dhikrIndex }: DhikrCardProps) {
     <div className="flex flex-col h-full w-full select-none px-8">
       {/* Ring + text — share all remaining space, centered together */}
       <div className="flex-1 flex flex-col items-center justify-center gap-5 min-h-0">
-        {/* Reset button sits just above the ring with breathing room */}
-        <div className="flex justify-center shrink-0">
-          <ResetButton dhikrIndex={dhikrIndex} />
-        </div>
-
-        {/* Progress ring */}
+        {/* Progress ring — reset button floats above without affecting layout */}
         <div className="relative flex items-center justify-center shrink-0">
+          <AnimatePresence>
+            {count > 0 && (
+              <motion.div
+                className="absolute left-1/2 -translate-x-1/2 w-max"
+                style={{ bottom: "calc(100% + 10px)" }}
+                initial={{ opacity: 0, scale: 0.92, y: 3 }}
+                animate={{ opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 500, damping: 28 } }}
+                exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.08, ease: "easeIn" } }}
+              >
+                <ResetButton dhikrIndex={dhikrIndex} />
+              </motion.div>
+            )}
+          </AnimatePresence>
           <ProgressRing count={count} target={target} size={220} strokeWidth={4} showPulse={showPulse} />
           <div className="absolute flex flex-col items-center gap-1">
             <motion.span

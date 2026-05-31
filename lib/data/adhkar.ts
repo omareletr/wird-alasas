@@ -13,23 +13,23 @@ export const ADHKAR: DhikrEntry[] = [
   {
     index: 0,
     arabic: "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
-    transliteration: "Hasbunallahu wa ni'mal-Wakeel",
-    translation:
-      "Sufficient for us is Allah, and He is the best disposer of affairs.",
+    transliteration: "Ḥasbuna -'llāhu wa ni'ma -'l - wakīl",
+    translation: "God is all we need. What an excellent Guardian is God.",
     targets: { full: 200, shortened: 20 },
   },
   {
     index: 1,
     arabic: "أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ",
-    transliteration: "Astaghfirullah al-'Azeem",
-    translation: "I seek forgiveness from Allah, the Most Great.",
+    transliteration: "Astaghfiru -'Llāha -'l - 'Aẓīm",
+    translation: "I ask the forgiveness of God in His glory.",
     targets: { full: 200, shortened: 20 },
   },
   {
     index: 2,
     arabic: "لَا إِلَٰهَ إِلَّا اللَّهُ الْمَلِكُ الْحَقُّ الْمُبِينُ",
-    transliteration: "La ilaha illallahul-Malikul-Haqqul-Mubeen",
-    translation: "There is no deity but Allah, the King, the Clear Truth.",
+    transliteration: "Lā ilāha illā - Llāhu - 'l - Maliku - 'l - Ḥaqqu -'l - Mubīn",
+    translation:
+      "There is no God but God, the King, the Real, the Manifestly Apparent.",
     targets: { full: 100, shortened: 10 },
   },
   {
@@ -37,9 +37,9 @@ export const ADHKAR: DhikrEntry[] = [
     arabic:
       "اللَّهُمَّ صَلِّ عَلَىٰ سَيِّدِنَا مُحَمَّدٍ وَعَلَىٰ آلِهِ وَصَحْبِهِ وَسَلِّمْ",
     transliteration:
-      "Allahumma salli 'ala Sayyidina Muhammadin wa 'ala alihi wa sahbihi wa sallim",
+      "Allāhumma, salli 'alā sayyidinā Muḥammadin wa 'alā ālihi wa ṣaḥbihi wa sallim",
     translation:
-      "O Allah, send prayers and peace upon our master Muhammad and upon his family and companions.",
+      "God, extol our noble lord Muhammad, his following, and his Companions and envelope them in perfect peace.",
     targets: { full: 100, shortened: 10 },
   },
 ];
