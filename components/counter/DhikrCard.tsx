@@ -17,7 +17,6 @@ export function DhikrCard({ entry, count, mode }: DhikrCardProps) {
   const vibrate = useHaptic();
   const prevCount = useRef(count);
 
-  // Fire haptic feedback whenever count changes (tap-driven)
   useEffect(() => {
     if (count !== prevCount.current) {
       vibrate(10);
@@ -33,10 +32,10 @@ export function DhikrCard({ entry, count, mode }: DhikrCardProps) {
         <div className="absolute flex flex-col items-center gap-1">
           <motion.span
             key={count}
-            className="text-5xl font-mono tabular-nums text-white leading-none"
-            initial={{ scale: 1.06 }}
+            className="text-5xl font-mono tabular-nums text-foreground leading-none"
+            initial={{ scale: 1.15 }}
             animate={{ scale: 1 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
           >
             {count}
           </motion.span>
@@ -50,19 +49,19 @@ export function DhikrCard({ entry, count, mode }: DhikrCardProps) {
       <p
         dir="rtl"
         lang="ar"
-        className="text-center text-3xl text-white"
+        className="text-center text-3xl text-foreground"
         style={{ fontFamily: "var(--font-arabic)", lineHeight: 2.2 }}
       >
         {entry.arabic}
       </p>
 
       {/* Transliteration */}
-      <p className="text-center text-[13px] font-mono italic text-white/50 leading-relaxed" dir="ltr">
+      <p className="text-center text-[13px] italic text-muted-foreground leading-relaxed" dir="ltr">
         {entry.transliteration}
       </p>
 
       {/* Translation */}
-      <p className="text-center text-[12px] font-mono text-white/30 leading-relaxed max-w-xs" dir="ltr">
+      <p className="text-center text-[12px] text-muted-foreground/70 leading-relaxed max-w-xs" dir="ltr">
         {entry.translation}
       </p>
     </div>

@@ -7,6 +7,7 @@ import type { ActiveSession, DhikrIndex } from "@/lib/storage/schema";
 interface SessionActions {
   incrementCount(index: DhikrIndex): void;
   setCount(index: DhikrIndex, value: number): void;
+  resetCount(index: DhikrIndex): void;
   setMode(mode: "full" | "shortened"): void;
   setActiveIndex(index: DhikrIndex): void;
   setSessionStartedAt(ts: number): void;
@@ -33,6 +34,11 @@ export const useSessionStore = create<SessionStore>()(
       setCount(index, value) {
         set((state) => ({
           counts: { ...state.counts, [index]: value },
+        }));
+      },
+      resetCount(index) {
+        set((state) => ({
+          counts: { ...state.counts, [index]: 0 },
         }));
       },
       setMode(mode) {

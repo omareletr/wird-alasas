@@ -24,6 +24,7 @@ export function ProgressRing({
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}
+      style={{ width: "min(260px, calc(100vw - 64px))", height: "min(260px, calc(100vw - 64px))" }}
       aria-hidden
     >
       {/* Track ring */}
@@ -32,7 +33,7 @@ export function ProgressRing({
         cy={center}
         r={radius}
         fill="none"
-        stroke="oklch(1 0 0 / 8%)"
+        stroke="var(--border)"
         strokeWidth={strokeWidth}
       />
       {/* Progress ring */}
@@ -41,7 +42,7 @@ export function ProgressRing({
         cy={center}
         r={radius}
         fill="none"
-        stroke="var(--accent)"
+        stroke={completed ? "var(--foreground)" : "var(--accent)"}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         initial={{ pathLength: 0 }}
@@ -49,6 +50,23 @@ export function ProgressRing({
         transition={{ duration: 0.15, ease: "easeOut" }}
         style={{ rotate: -90, originX: "50%", originY: "50%" }}
       />
+      {/* Completion glow pulse */}
+      {completed && (
+        <motion.circle
+          key="complete-pulse"
+          cx={center}
+          cy={center}
+          r={radius}
+          fill="none"
+          stroke="var(--foreground)"
+          strokeWidth={strokeWidth * 2.5}
+          strokeLinecap="round"
+          initial={{ opacity: 0.3, strokeWidth: strokeWidth * 2.5 }}
+          animate={{ opacity: 0, strokeWidth: strokeWidth * 5 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          style={{ rotate: -90, originX: "50%", originY: "50%" }}
+        />
+      )}
     </svg>
   );
 }

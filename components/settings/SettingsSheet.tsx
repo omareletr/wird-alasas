@@ -22,9 +22,9 @@ function geoStatusMessage(status: ReturnType<typeof useGeolocation>["status"]): 
 
 function geoStatusColor(status: ReturnType<typeof useGeolocation>["status"]): string {
   switch (status) {
-    case "loading": return "text-white/30";
-    case "success": return "text-white/50";
-    default: return "text-white/30";
+    case "loading": return "text-muted-foreground/70";
+    case "success": return "text-muted-foreground";
+    default: return "text-muted-foreground/70";
   }
 }
 
@@ -66,22 +66,22 @@ export function SettingsSheet() {
     <Sheet>
       <SheetTrigger asChild>
         <button
-          className="p-2 text-white/30 hover:text-white/60 transition-colors"
+          className="flex items-center justify-center h-10 w-10 text-muted-foreground/70 hover:text-muted-foreground transition-colors"
           aria-label="Settings"
         >
-          <Settings size={20} />
+          <Settings size={18} />
         </button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="bg-card border-t border-border">
+      <SheetContent side="bottom" className="bg-card border-t border-border max-h-[85vh]">
         <SheetHeader>
-          <SheetTitle className="text-[11px] font-mono tracking-[0.2em] uppercase text-white/50 text-left">
+          <SheetTitle className="text-[11px] font-sans tracking-[0.2em] uppercase text-muted-foreground text-left">
             Settings
           </SheetTitle>
         </SheetHeader>
-        <div className="mt-6 space-y-4">
+        <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-6 space-y-4">
           {/* Mode section */}
           <div>
-            <p className="text-[10px] font-mono tracking-widest uppercase text-white/30 mb-4">
+            <p className="text-[10px] font-sans tracking-widest uppercase text-muted-foreground/70 mb-4">
               Default mode
             </p>
             <RadioGroup
@@ -91,47 +91,44 @@ export function SettingsSheet() {
             >
               <div className="flex items-center gap-3">
                 <RadioGroupItem value="full" id="mode-full" />
-                <Label htmlFor="mode-full" className="text-sm font-mono text-white cursor-pointer">
+                <Label htmlFor="mode-full" className="text-sm font-sans text-foreground cursor-pointer">
                   Full — 200 · 200 · 100 · 100
                 </Label>
               </div>
               <div className="flex items-center gap-3">
                 <RadioGroupItem value="shortened" id="mode-shortened" />
-                <Label htmlFor="mode-shortened" className="text-sm font-mono text-white cursor-pointer">
+                <Label htmlFor="mode-shortened" className="text-sm font-sans text-foreground cursor-pointer">
                   Short — 20 · 20 · 10 · 10
                 </Label>
               </div>
             </RadioGroup>
           </div>
 
-          <hr className="border-white/10" />
+          <hr className="border-border" />
 
           {/* Location section */}
           <div>
-            <p className="text-[10px] font-mono tracking-widest uppercase text-white/30 mb-4">
+            <p className="text-[10px] font-sans tracking-widest uppercase text-muted-foreground/70 mb-4">
               Location
             </p>
 
-            {/* Status line */}
             {status !== "idle" && (
-              <p className={`text-[10px] font-mono mb-3 ${geoStatusColor(status)}`}>
+              <p className={`text-[10px] font-sans mb-3 ${geoStatusColor(status)}`}>
                 {geoStatusMessage(status)}
               </p>
             )}
 
-            {/* Current coords display */}
             {location !== null && (
-              <p className="text-[10px] font-mono text-white/50 mb-3 tabular-nums">
+              <p className="text-[10px] font-sans text-muted-foreground mb-3 tabular-nums">
                 lat: {location.latitude.toFixed(4)}&nbsp;&nbsp;lon: {location.longitude.toFixed(4)}
               </p>
             )}
 
-            {/* Manual entry form */}
             {showManualForm && (
               <div className="space-y-2 mb-3">
                 <div className="flex gap-2">
                   <div className="flex-1">
-                    <Label htmlFor="lat-input" className="text-[10px] font-mono text-white/30 uppercase tracking-widest mb-1 block">
+                    <Label htmlFor="lat-input" className="text-[10px] font-sans text-muted-foreground/70 uppercase tracking-widest mb-1 block">
                       Latitude
                     </Label>
                     <Input
@@ -143,11 +140,11 @@ export function SettingsSheet() {
                       placeholder="21.4225"
                       value={lat}
                       onChange={(e) => { setLat(e.target.value); setValidationError(false); }}
-                      className="text-sm font-mono bg-white/5 border-white/10 text-white placeholder:text-white/20"
+                      className="text-sm font-sans bg-muted border-border text-foreground placeholder:text-muted-foreground/40"
                     />
                   </div>
                   <div className="flex-1">
-                    <Label htmlFor="lon-input" className="text-[10px] font-mono text-white/30 uppercase tracking-widest mb-1 block">
+                    <Label htmlFor="lon-input" className="text-[10px] font-sans text-muted-foreground/70 uppercase tracking-widest mb-1 block">
                       Longitude
                     </Label>
                     <Input
@@ -159,26 +156,25 @@ export function SettingsSheet() {
                       placeholder="39.8262"
                       value={lon}
                       onChange={(e) => { setLon(e.target.value); setValidationError(false); }}
-                      className="text-sm font-mono bg-white/5 border-white/10 text-white placeholder:text-white/20"
+                      className="text-sm font-sans bg-muted border-border text-foreground placeholder:text-muted-foreground/40"
                     />
                   </div>
                 </div>
                 {validationError && (
-                  <p className="text-[10px] font-mono text-red-400">Invalid coordinates</p>
+                  <p className="text-[10px] font-sans text-destructive">Invalid coordinates</p>
                 )}
                 <button
                   onClick={handleSave}
-                  className="text-[10px] font-mono tracking-widest uppercase text-amber-400 hover:text-amber-300 transition-colors"
+                  className="text-[10px] font-sans tracking-widest uppercase text-accent hover:text-accent/80 transition-colors"
                 >
                   Save
                 </button>
               </div>
             )}
 
-            {/* Use my location button */}
             <button
               onClick={retry}
-              className="text-[10px] font-mono tracking-widest uppercase text-white/30 hover:text-white/60 transition-colors"
+              className="text-[10px] font-sans tracking-widest uppercase text-muted-foreground/70 hover:text-muted-foreground transition-colors"
             >
               Use my location
             </button>

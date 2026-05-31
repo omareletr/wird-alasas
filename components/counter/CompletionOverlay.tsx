@@ -10,20 +10,21 @@ export function CompletionOverlay({ onDismiss }: CompletionOverlayProps) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.4, ease: "easeIn" }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{ duration: 0.35, ease: "easeInOut" }}
       onClick={onDismiss}
-      className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/85 cursor-pointer"
+      className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-background/90 backdrop-blur-md cursor-pointer"
     >
       <div className="flex flex-col items-center gap-6 px-8 text-center">
         <p
           dir="rtl"
           lang="ar"
-          className="text-4xl text-white"
+          className="text-4xl text-foreground"
           style={{ fontFamily: "var(--font-arabic)", lineHeight: 2.2 }}
         >
           تَقَبَّلَ اللَّهُ
         </p>
-        <p className="text-[11px] font-mono text-accent tracking-[0.25em] uppercase">
+        <p className="text-[11px] font-sans text-accent tracking-[0.25em] uppercase">
           May Allah accept
         </p>
       </div>

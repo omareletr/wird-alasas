@@ -31,21 +31,21 @@ export function HistorySheet() {
     <Sheet>
       <SheetTrigger asChild>
         <button
-          className="p-2 text-white/30 hover:text-white/60 transition-colors"
+          className="flex items-center justify-center h-10 w-10 text-muted-foreground/70 hover:text-muted-foreground transition-colors"
           aria-label="History"
         >
-          <History size={20} />
+          <History size={18} />
         </button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="bg-card border-t border-border">
+      <SheetContent side="bottom" className="bg-card border-t border-border max-h-[85vh]">
         <SheetHeader>
-          <SheetTitle className="text-[11px] font-mono tracking-[0.2em] uppercase text-white/50 text-left">
+          <SheetTitle className="text-[11px] font-sans tracking-[0.2em] uppercase text-muted-foreground text-left">
             History
           </SheetTitle>
         </SheetHeader>
-        <div className="mt-6 space-y-6">
+        <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-6 space-y-6">
           {records === null ? (
-            <p className="text-[10px] font-mono text-white/30">Loading…</p>
+            <p className="text-[10px] font-sans text-muted-foreground/70">Loading…</p>
           ) : (
             <>
               <StreakDisplay current={streaks.current} longest={streaks.longest} />

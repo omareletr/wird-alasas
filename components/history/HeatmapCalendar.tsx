@@ -6,6 +6,7 @@ import type { Activity, BlockElement } from "react-activity-calendar";
 import "react-activity-calendar/tooltips.css";
 import { classifyDay } from "@/lib/utils/completionClassifier";
 import type { DailyRecord } from "@/lib/storage/schema";
+import { useThemeStore } from "@/lib/store/themeStore";
 
 interface HeatmapCalendarProps {
   data: Activity[];
@@ -37,9 +38,11 @@ export function recordsToActivityData(records: DailyRecord[]): Activity[] {
 }
 
 export function HeatmapCalendar({ data, onDayClick }: HeatmapCalendarProps) {
+  const theme = useThemeStore((s) => s.theme);
+
   if (data.length === 0) {
     return (
-      <p className="text-[10px] font-mono tracking-widest uppercase text-white/30">
+      <p className="text-[10px] font-sans tracking-widest uppercase text-muted-foreground/60">
         No history yet
       </p>
     );
@@ -49,12 +52,17 @@ export function HeatmapCalendar({ data, onDayClick }: HeatmapCalendarProps) {
     <ActivityCalendar
       data={data}
       maxLevel={2}
-      colorScheme="dark"
+      colorScheme={theme}
       theme={{
         dark: [
           "oklch(0.15 0 0)",
           "oklch(0.55 0 0)",
           "oklch(0.72 0.10 70)",
+        ],
+        light: [
+          "oklch(0.90 0.01 80)",
+          "oklch(0.72 0.08 65)",
+          "oklch(0.60 0.14 65)",
         ],
       }}
       blockSize={12}

@@ -41,21 +41,21 @@ export function DayDetailSheet({ dayKey, onClose }: DayDetailSheetProps) {
       <div className="flex items-center gap-2 mb-6">
         <button
           onClick={onClose}
-          className="p-1 text-white/50 hover:text-white/80 transition-colors"
+          className="p-1 text-muted-foreground hover:text-foreground transition-colors"
           aria-label="Back"
         >
           <ChevronLeft size={20} />
         </button>
-        <span className="text-[11px] font-mono tracking-[0.15em] uppercase text-white/50">
+        <span className="text-[11px] font-sans tracking-[0.15em] uppercase text-muted-foreground">
           {formattedDate}
         </span>
       </div>
 
       {/* Content */}
       {record === null ? (
-        <p className="text-[10px] font-mono text-white/30">Loading…</p>
+        <p className="text-[10px] font-sans text-muted-foreground/70">Loading…</p>
       ) : record === undefined ? (
-        <p className="text-[10px] font-mono text-white/30">
+        <p className="text-[10px] font-sans text-muted-foreground/70">
           No record for this day
         </p>
       ) : (
@@ -67,17 +67,17 @@ export function DayDetailSheet({ dayKey, onClose }: DayDetailSheetProps) {
             return (
               <div
                 key={entry.index}
-                className={`flex items-center justify-between py-2 border-b border-white/5 ${
-                  completed ? "text-white" : "text-white/40"
+                className={`flex items-center justify-between py-2 border-b border-border/30 ${
+                  completed ? "text-foreground" : "text-muted-foreground/70"
                 }`}
               >
-                <span className="text-[10px] font-mono tracking-wide flex-1 mr-4 truncate">
+                <span className="text-[10px] font-sans tracking-wide flex-1 mr-4 line-clamp-1">
                   {entry.transliteration}
                 </span>
                 <div className="flex items-center gap-2 shrink-0">
                   <span className="text-[11px] font-mono tabular-nums">
                     {count}
-                    <span className="text-white/30"> / </span>
+                    <span className="text-muted-foreground/50"> / </span>
                     {target}
                   </span>
                   {completed && (

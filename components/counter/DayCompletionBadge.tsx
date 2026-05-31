@@ -13,15 +13,14 @@ export function DayCompletionBadge() {
 
   if (level === "full") {
     return (
-      <span className="text-[10px] font-mono tracking-widest uppercase text-amber-400">
+      <span className="text-[10px] font-sans tracking-wide uppercase text-accent border border-accent/40 px-2 py-0.5 rounded-full">
         complete
       </span>
     );
   }
 
-  // partial
   return (
-    <span className="text-[10px] font-mono tracking-widest uppercase text-white/40">
+    <span className="text-[10px] font-sans tracking-wide uppercase text-muted-foreground border border-border px-2 py-0.5 rounded-full">
       partial
     </span>
   );
