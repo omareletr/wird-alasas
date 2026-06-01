@@ -8,7 +8,7 @@ const badgeAnimation = {
   initial: { opacity: 0, scale: 0.75, filter: "blur(4px)" },
   animate: { opacity: 1, scale: 1, filter: "blur(0px)" },
   exit: { opacity: 0, scale: 0.75, filter: "blur(4px)" },
-  transition: { type: "spring", stiffness: 400, damping: 22 },
+  transition: { type: "spring" as const, stiffness: 400, damping: 22 },
 };
 
 export function DayCompletionBadge() {

@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RotateCcw, Check } from "lucide-react";
 import { motion, AnimatePresence, useIsPresent } from "motion/react";
+import type { Variants } from "motion/react";
 import { useSessionStore } from "@/lib/store/sessionStore";
 import { useHaptic } from "@/lib/hooks/useHaptic";
 import type { DhikrIndex } from "@/lib/storage/schema";
@@ -9,16 +10,10 @@ import type { DhikrIndex } from "@/lib/storage/schema";
 const AUTO_CANCEL_MS = 2500;
 const DONE_MS = 1400;
 
-const pillAnimation = {
+const pillVariants: Variants = {
   initial: { opacity: 0, scale: 0.92, y: 3 },
-  animate: {
-    opacity: 1, scale: 1, y: 0,
-    transition: { type: "spring", stiffness: 500, damping: 28 },
-  },
-  exit: {
-    opacity: 0, scale: 0.95,
-    transition: { duration: 0.08, ease: "easeIn" },
-  },
+  animate: { opacity: 1, scale: 1, y: 0 },
+  exit: { opacity: 0, scale: 0.95 },
 };
 
 type State = "idle" | "confirming" | "done";
@@ -78,7 +73,7 @@ export function ResetButton({ dhikrIndex }: ResetButtonProps) {
       {state === "confirming" && (
         <motion.button
           key="confirming"
-          {...pillAnimation}
+          variants={pillVariants} initial="initial" animate="animate" exit="exit" transition={{ type: "spring", stiffness: 500, damping: 28 }}
           aria-label="Confirm reset"
           onPointerDown={handlePointerDown}
           onClick={handleClick}
@@ -92,7 +87,7 @@ export function ResetButton({ dhikrIndex }: ResetButtonProps) {
       {state === "done" && (
         <motion.span
           key="done"
-          {...pillAnimation}
+          variants={pillVariants} initial="initial" animate="animate" exit="exit" transition={{ type: "spring", stiffness: 500, damping: 28 }}
           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-sans tracking-widest uppercase select-none text-green-500 border border-green-500/40"
         >
           <Check size={12} strokeWidth={2.5} />
@@ -102,7 +97,7 @@ export function ResetButton({ dhikrIndex }: ResetButtonProps) {
       {state === "idle" && (
         <motion.button
           key="idle"
-          {...pillAnimation}
+          variants={pillVariants} initial="initial" animate="animate" exit="exit" transition={{ type: "spring", stiffness: 500, damping: 28 }}
           aria-label="Reset counter"
           onPointerDown={handlePointerDown}
           onClick={handleClick}

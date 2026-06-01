@@ -68,7 +68,7 @@ const LIGHT_COLORS = [
 const CALENDAR_THEME = {
   dark: [...DARK_COLORS],
   light: [...LIGHT_COLORS],
-} as const;
+};
 
 /** Minimal color legend for the heatmap levels. */
 export function HeatmapLegend() {
