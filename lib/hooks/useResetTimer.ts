@@ -32,13 +32,16 @@ function currentDevotionalDay(): string {
 export async function archiveAndReset(
   scheduleNext: () => void
 ): Promise<void> {
-  const { counts, mode, sessionStartedAt } = useSessionStore.getState();
-  if (sessionStartedAt !== null) {
-    const dayKey = currentDevotionalDay();
-    await addDailyRecord({ dayKey, counts, mode, completedAt: Date.now() });
+  try {
+    const { counts, mode, sessionStartedAt } = useSessionStore.getState();
+    if (sessionStartedAt !== null) {
+      const dayKey = currentDevotionalDay();
+      await addDailyRecord({ dayKey, counts, mode, completedAt: Date.now() });
+    }
+    useSessionStore.getState().reset();
+  } finally {
+    scheduleNext();
   }
-  useSessionStore.getState().reset();
-  scheduleNext();
 }
 
 /**
@@ -83,12 +86,18 @@ export function useResetTimer(): void {
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
+    const unsubscribeResetHour = useSettingsStore.subscribe(
+      (s) => s.resetHour,
+      () => scheduleNext()
+    );
+
     return () => {
       if (timerRef.current !== null) {
         clearTimeout(timerRef.current);
         timerRef.current = null;
       }
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      unsubscribeResetHour();
     };
   }, []);
 }
