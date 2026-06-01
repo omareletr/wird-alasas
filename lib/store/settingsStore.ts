@@ -18,6 +18,9 @@ export const useSettingsStore = create<SettingsStore>()(
       hasOnboarded: false,
 
       setResetHour(hour) {
+        if (hour < 0 || hour > 23) {
+          throw new Error(`Invalid reset hour: ${hour}. Must be 0–23.`);
+        }
         set({ resetHour: hour });
       },
       setHasOnboarded(value) {
