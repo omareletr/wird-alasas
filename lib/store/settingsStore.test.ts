@@ -2,22 +2,45 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { useSettingsStore } from "@/lib/store/settingsStore";
 
 beforeEach(() => {
-  useSettingsStore.setState({ location: null });
+  useSettingsStore.setState({ resetHour: 5, hasOnboarded: false });
 });
 
-describe("settingsStore.setLocation", () => {
-  it("initial location is null", () => {
-    expect(useSettingsStore.getState().location).toBeNull();
+describe("settingsStore.setResetHour", () => {
+  it("initial resetHour is 5", () => {
+    expect(useSettingsStore.getState().resetHour).toBe(5);
   });
 
-  it("setLocation stores coordinates", () => {
-    useSettingsStore.getState().setLocation({ latitude: 21.4225, longitude: 39.8262 });
-    expect(useSettingsStore.getState().location).toEqual({ latitude: 21.4225, longitude: 39.8262 });
+  it("setResetHour stores a valid hour", () => {
+    useSettingsStore.getState().setResetHour(3);
+    expect(useSettingsStore.getState().resetHour).toBe(3);
   });
 
-  it("setLocation(null) clears location", () => {
-    useSettingsStore.getState().setLocation({ latitude: 21.4225, longitude: 39.8262 });
-    useSettingsStore.getState().setLocation(null);
-    expect(useSettingsStore.getState().location).toBeNull();
+  it("setResetHour accepts boundary values 0 and 23", () => {
+    useSettingsStore.getState().setResetHour(0);
+    expect(useSettingsStore.getState().resetHour).toBe(0);
+    useSettingsStore.getState().setResetHour(23);
+    expect(useSettingsStore.getState().resetHour).toBe(23);
+  });
+
+  it("setResetHour throws on out-of-range values", () => {
+    expect(() => useSettingsStore.getState().setResetHour(-1)).toThrow();
+    expect(() => useSettingsStore.getState().setResetHour(24)).toThrow();
+  });
+});
+
+describe("settingsStore.setHasOnboarded", () => {
+  it("initial hasOnboarded is false", () => {
+    expect(useSettingsStore.getState().hasOnboarded).toBe(false);
+  });
+
+  it("setHasOnboarded stores true", () => {
+    useSettingsStore.getState().setHasOnboarded(true);
+    expect(useSettingsStore.getState().hasOnboarded).toBe(true);
+  });
+
+  it("setHasOnboarded can be reset to false", () => {
+    useSettingsStore.getState().setHasOnboarded(true);
+    useSettingsStore.getState().setHasOnboarded(false);
+    expect(useSettingsStore.getState().hasOnboarded).toBe(false);
   });
 });
