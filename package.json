@@ -10,8 +10,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest",
-    "test:run": "vitest run"
+    "test": "TZ=UTC vitest",
+    "test:run": "TZ=UTC vitest run"
   },
   "dependencies": {
     "@serwist/next": "^9.5.11",
