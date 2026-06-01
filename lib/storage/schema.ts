@@ -20,7 +20,10 @@ export interface ActiveSession {
 
 /** User preferences persisted to localStorage under "wird-settings". */
 export interface UserSettings {
-  location: { latitude: number; longitude: number } | null;
+  /** Hour (0–23, local time) at which the daily wird resets. Default 5 (5am). */
+  resetHour: number;
+  /** True after the user has completed the first-launch onboarding screen. */
+  hasOnboarded: boolean;
 }
 
 /**

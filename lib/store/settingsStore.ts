@@ -5,7 +5,8 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import type { UserSettings } from "@/lib/storage/schema";
 
 interface SettingsActions {
-  setLocation(loc: { latitude: number; longitude: number } | null): void;
+  setResetHour(hour: number): void;
+  setHasOnboarded(value: boolean): void;
 }
 
 type SettingsStore = UserSettings & SettingsActions;
@@ -13,22 +14,26 @@ type SettingsStore = UserSettings & SettingsActions;
 export const useSettingsStore = create<SettingsStore>()(
   persist(
     (set) => ({
-      // Default state
-      location: null,
+      resetHour: 5,
+      hasOnboarded: false,
 
-      // Actions
-      setLocation(loc) {
-        set({ location: loc });
+      setResetHour(hour) {
+        set({ resetHour: hour });
+      },
+      setHasOnboarded(value) {
+        set({ hasOnboarded: value });
       },
     }),
     {
       name: "wird-settings",
       storage: createJSONStorage(() => localStorage),
       skipHydration: true,
-      version: 2,
-      // v2: defaultMode removed. Strip all stale keys and keep only location.
-      migrate: (persisted: unknown) => ({
-        location: (persisted as Record<string, unknown>)?.location ?? null,
+      version: 3,
+      migrate: () => ({
+        // All users (including existing) get hasOnboarded: false so they see
+        // the new onboarding screen and consciously choose their reset hour.
+        resetHour: 5,
+        hasOnboarded: false,
       }),
     }
   )
