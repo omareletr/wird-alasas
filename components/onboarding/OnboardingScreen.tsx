@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import { useSettingsStore } from "@/lib/store/settingsStore";
-
-function formatHour(h: number): string {
-  if (h === 0) return "12am";
-  if (h < 12) return `${h}am`;
-  if (h === 12) return "12pm";
-  return `${h - 12}pm`;
-}
-
-const HOURS = Array.from({ length: 24 }, (_, i) => i);
+import { BismillahHeader } from "@/components/counter/BismillahHeader";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { TIME_OPTIONS } from "@/lib/utils/timeOptions";
 
 export function OnboardingScreen() {
   const [selectedHour, setSelectedHour] = useState(5);
@@ -32,12 +32,7 @@ export function OnboardingScreen() {
     >
       {/* Welcome */}
       <div className="flex flex-col items-center justify-center flex-1 px-8 gap-5">
-        <h1 className="font-heading text-2xl tracking-tight text-foreground">
-          wird الأساس
-        </h1>
-        <p className="text-[11px] font-sans tracking-[0.25em] uppercase text-muted-foreground text-center">
-          Your daily wird, beautifully simple
-        </p>
+        <BismillahHeader />
         <p className="text-sm font-sans text-muted-foreground text-center leading-relaxed max-w-[260px]">
           A quiet space to count your dhikr and keep your daily wird alive.
         </p>
@@ -49,23 +44,21 @@ export function OnboardingScreen() {
           When should your wird reset each day?
         </p>
 
-        {/* 4 rows × 6 cols: 12am–11pm */}
-        <div className="grid grid-cols-6 gap-2">
-          {HOURS.map((h) => (
-            <button
-              key={h}
-              onClick={() => setSelectedHour(h)}
-              className={[
-                "text-[10px] font-sans tracking-wide rounded-md py-2 transition-colors",
-                selectedHour === h
-                  ? "bg-accent text-accent-foreground font-medium"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80",
-              ].join(" ")}
-            >
-              {formatHour(h)}
-            </button>
-          ))}
-        </div>
+        <Select
+          value={String(selectedHour)}
+          onValueChange={(v) => setSelectedHour(Number(v))}
+        >
+          <SelectTrigger className="w-full font-sans text-sm">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {TIME_OPTIONS.map((opt) => (
+              <SelectItem key={opt.value} value={String(opt.value)} className="font-sans text-sm">
+                {opt.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
         <button
           onClick={handleBegin}

@@ -6,15 +6,17 @@ import { useSettingsStore } from "@/lib/store/settingsStore";
 import { addDailyRecord } from "@/lib/storage/idb";
 import { getDevotionalDay } from "@/lib/utils/devotionalDay";
 
-/** Returns the next Date at which the local clock will show resetHour:00:00. */
+/** Returns the next Date at which the local clock will show the reset time. */
 function getNextReset(resetHour: number): Date {
   const now = new Date();
+  const hour = Math.floor(resetHour);
+  const minute = resetHour % 1 === 0.5 ? 30 : 0;
   const todayReset = new Date(
     now.getFullYear(),
     now.getMonth(),
     now.getDate(),
-    resetHour,
-    0,
+    hour,
+    minute,
     0,
     0
   );
@@ -86,10 +88,9 @@ export function useResetTimer(): void {
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
-    const unsubscribeResetHour = useSettingsStore.subscribe(
-      (s) => s.resetHour,
-      () => scheduleNext()
-    );
+    const unsubscribeResetHour = useSettingsStore.subscribe((state, prev) => {
+      if (state.resetHour !== prev.resetHour) scheduleNext();
+    });
 
     return () => {
       if (timerRef.current !== null) {

@@ -6,10 +6,11 @@
  * Pure — never calls Date.now() or new Date() without arguments.
  */
 export function getDevotionalDay(now: Date, resetHour: number): string {
-  const localHour = now.getHours();
+  const localMinutes = now.getHours() * 60 + now.getMinutes();
+  const resetMinutes = resetHour * 60;
   const localDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  if (localHour < resetHour) {
+  if (localMinutes < resetMinutes) {
     const yesterday = new Date(localDate);
     yesterday.setDate(yesterday.getDate() - 1);
     return formatDayKey(yesterday);

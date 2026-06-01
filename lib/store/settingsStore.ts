@@ -18,8 +18,8 @@ export const useSettingsStore = create<SettingsStore>()(
       hasOnboarded: false,
 
       setResetHour(hour) {
-        if (hour < 0 || hour > 23) {
-          throw new Error(`Invalid reset hour: ${hour}. Must be 0–23.`);
+        if (hour < 0 || hour > 23.5 || hour % 0.5 !== 0) {
+          throw new Error(`Invalid reset hour: ${hour}. Must be 0–23.5 in 0.5 steps.`);
         }
         set({ resetHour: hour });
       },
@@ -31,7 +31,7 @@ export const useSettingsStore = create<SettingsStore>()(
       name: "wird-settings",
       storage: createJSONStorage(() => localStorage),
       skipHydration: true,
-      version: 3,
+      version: 4,
       migrate: () => ({
         // All users (including existing) get hasOnboarded: false so they see
         // the new onboarding screen and consciously choose their reset hour.
