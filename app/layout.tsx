@@ -66,7 +66,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased">
+      <body className="antialiased" suppressHydrationWarning>
         <ThemeProvider>
           <StoreHydration />
           {children}

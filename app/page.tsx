@@ -15,58 +15,64 @@ import { InstallPrompt } from "@/components/InstallPrompt";
 import { OnboardingScreen } from "@/components/onboarding/OnboardingScreen";
 import { ADHKAR, getTarget } from "@/lib/data/adhkar";
 
-function wasSessionAlreadyComplete(): boolean {
-  if (typeof window === "undefined") return false;
-  try {
-    const stored = JSON.parse(localStorage.getItem("wird-session") || "{}");
-    const { counts = {}, mode = "full" } = stored?.state ?? {};
-    return ADHKAR.every((e) => (counts[e.index] ?? 0) >= getTarget(e, mode));
-  } catch {
-    return false;
-  }
-}
-
-// Read localStorage synchronously to avoid a flash of the onboarding screen
-// for returning users while the Zustand store hydrates.
-function wasAlreadyOnboarded(): boolean {
-  if (typeof window === "undefined") return false;
-  try {
-    const stored = JSON.parse(localStorage.getItem("wird-settings") || "{}");
-    return stored?.state?.hasOnboarded === true;
-  } catch {
-    return false;
-  }
-}
-
 export default function CounterPage() {
   const { sessionStartedAt, setSessionStartedAt, counts, mode } =
     useSessionStore();
 
-  const [overlayDismissed, setOverlayDismissed] = useState(wasSessionAlreadyComplete);
+  const [mounted, setMounted] = useState(false);
+  const [storesHydrated, setStoresHydrated] = useState(false);
+  const [overlayDismissed, setOverlayDismissed] = useState(false);
+  const [overlayHydrationChecked, setOverlayHydrationChecked] = useState(false);
 
-  // showOnboarding starts from localStorage so returning users see no flash.
-  // The useEffect syncs it once the store hydrates (catches the OnboardingScreen
-  // setting hasOnboarded → true).
-  const [showOnboarding, setShowOnboarding] = useState(() => !wasAlreadyOnboarded());
   const hasOnboarded = useSettingsStore((s) => s.hasOnboarded);
+
   useEffect(() => {
-    if (hasOnboarded) setShowOnboarding(false);
-  }, [hasOnboarded]);
+    setMounted(true);
+
+    const updateHydrationState = () => {
+      setStoresHydrated(
+        useSessionStore.persist.hasHydrated() &&
+          useSettingsStore.persist.hasHydrated()
+      );
+    };
+
+    updateHydrationState();
+    const unsubscribeSession =
+      useSessionStore.persist.onFinishHydration(updateHydrationState);
+    const unsubscribeSettings =
+      useSettingsStore.persist.onFinishHydration(updateHydrationState);
+
+    return () => {
+      unsubscribeSession();
+      unsubscribeSettings();
+    };
+  }, []);
 
   useWakeLock();
-  useResetTimer();
+  useResetTimer(mounted && storesHydrated);
 
   useEffect(() => {
-    if (sessionStartedAt === null) {
+    if (mounted && storesHydrated && sessionStartedAt === null) {
       setSessionStartedAt(Date.now());
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  if (showOnboarding) return <OnboardingScreen />;
+  }, [mounted, sessionStartedAt, setSessionStartedAt, storesHydrated]);
 
   const allComplete = ADHKAR.every(
     (entry) => counts[entry.index] >= getTarget(entry, mode)
   );
+
+  useEffect(() => {
+    if (!mounted || !storesHydrated || overlayHydrationChecked) return;
+    setOverlayDismissed(allComplete);
+    setOverlayHydrationChecked(true);
+  }, [allComplete, mounted, overlayHydrationChecked, storesHydrated]);
+
+  if (!mounted || !storesHydrated) {
+    return <main className="h-dvh w-full bg-background" />;
+  }
+
+  if (!hasOnboarded) return <OnboardingScreen />;
+
   const showOverlay = allComplete && !overlayDismissed;
 
   return (

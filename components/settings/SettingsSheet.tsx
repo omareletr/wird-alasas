@@ -6,19 +6,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Settings } from "lucide-react";
 import { useSettingsStore } from "@/lib/store/settingsStore";
 import { useSessionStore } from "@/lib/store/sessionStore";
-import { TIME_OPTIONS } from "@/lib/utils/timeOptions";
+import { ResetTimePicker } from "@/components/ui/reset-time-picker";
 
 export function SettingsSheet() {
   const mode = useSessionStore((s) => s.mode);
@@ -84,21 +77,7 @@ export function SettingsSheet() {
             <p className="text-[10px] font-sans tracking-widest uppercase text-muted-foreground/70 mb-4">
               Daily reset time
             </p>
-            <Select
-              value={String(resetHour)}
-              onValueChange={(v) => setResetHour(Number(v))}
-            >
-              <SelectTrigger className="w-full font-sans text-sm">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {TIME_OPTIONS.map((opt) => (
-                  <SelectItem key={opt.value} value={String(opt.value)} className="font-sans text-sm">
-                    {opt.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <ResetTimePicker value={resetHour} onChange={setResetHour} />
           </div>
         </div>
       </SheetContent>

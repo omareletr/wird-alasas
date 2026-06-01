@@ -53,11 +53,13 @@ export async function archiveAndReset(
  * - Listens for visibilitychange to handle tab sleep/wake boundary crossing.
  * - Cleans up on unmount.
  */
-export function useResetTimer(): void {
+export function useResetTimer(enabled = true): void {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const storedDayRef = useRef<string>(currentDevotionalDay());
 
   useEffect(() => {
+    if (!enabled) return;
+
     function scheduleNext(): void {
       if (timerRef.current !== null) {
         clearTimeout(timerRef.current);
@@ -100,5 +102,5 @@ export function useResetTimer(): void {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       unsubscribeResetHour();
     };
-  }, []);
+  }, [enabled]);
 }

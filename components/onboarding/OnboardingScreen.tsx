@@ -1,21 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSettingsStore } from "@/lib/store/settingsStore";
 import { BismillahHeader } from "@/components/counter/BismillahHeader";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { TIME_OPTIONS } from "@/lib/utils/timeOptions";
+import { ResetTimePicker } from "@/components/ui/reset-time-picker";
 
 export function OnboardingScreen() {
-  const [selectedHour, setSelectedHour] = useState(5);
+  const resetHour = useSettingsStore((s) => s.resetHour);
+  const [selectedHour, setSelectedHour] = useState(resetHour);
   const setResetHour = useSettingsStore((s) => s.setResetHour);
   const setHasOnboarded = useSettingsStore((s) => s.setHasOnboarded);
+
+  useEffect(() => {
+    setSelectedHour(resetHour);
+  }, [resetHour]);
 
   function handleBegin() {
     setResetHour(selectedHour);
@@ -44,21 +42,7 @@ export function OnboardingScreen() {
           When should your wird reset each day?
         </p>
 
-        <Select
-          value={String(selectedHour)}
-          onValueChange={(v) => setSelectedHour(Number(v))}
-        >
-          <SelectTrigger className="w-full font-sans text-sm">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {TIME_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={String(opt.value)} className="font-sans text-sm">
-                {opt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <ResetTimePicker value={selectedHour} onChange={setSelectedHour} />
 
         <button
           onClick={handleBegin}
