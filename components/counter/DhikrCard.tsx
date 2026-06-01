@@ -47,7 +47,7 @@ export function DhikrCard({ entry, count, mode, dhikrIndex }: DhikrCardProps) {
             {count > 0 && (
               <motion.div
                 className="absolute left-1/2 -translate-x-1/2 w-max"
-                style={{ bottom: "calc(100% + 10px)" }}
+                style={{ bottom: "calc(100% + 14px)" }}
                 initial={{ opacity: 0, scale: 0.92, y: 3 }}
                 animate={{ opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 500, damping: 28 } }}
                 exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.08, ease: "easeIn" } }}
