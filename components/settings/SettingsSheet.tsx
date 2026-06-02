@@ -1,4 +1,6 @@
 "use client";
+import { useEffect, useState } from "react";
+import { Capacitor } from "@capacitor/core";
 import {
   Sheet,
   SheetContent,
@@ -12,12 +14,26 @@ import { Settings } from "lucide-react";
 import { useSettingsStore } from "@/lib/store/settingsStore";
 import { useSessionStore } from "@/lib/store/sessionStore";
 import { ResetTimePicker } from "@/components/ui/reset-time-picker";
+import type { FeedbackMode } from "@/lib/storage/schema";
 
 export function SettingsSheet() {
+  const [isNative, setIsNative] = useState(false);
   const mode = useSessionStore((s) => s.mode);
   const setMode = useSessionStore((s) => s.setMode);
   const resetHour = useSettingsStore((s) => s.resetHour);
   const setResetHour = useSettingsStore((s) => s.setResetHour);
+  const feedbackMode = useSettingsStore((s) => s.feedbackMode);
+  const setFeedbackMode = useSettingsStore((s) => s.setFeedbackMode);
+
+  useEffect(() => {
+    setIsNative(Capacitor.isNativePlatform());
+  }, []);
+
+  useEffect(() => {
+    if (isNative && (feedbackMode === "audio" || feedbackMode === "both")) {
+      setFeedbackMode("haptic");
+    }
+  }, [feedbackMode, isNative, setFeedbackMode]);
 
   return (
     <Sheet>
@@ -68,6 +84,66 @@ export function SettingsSheet() {
                 </Label>
               </div>
             </RadioGroup>
+          </div>
+
+          <hr className="border-border" />
+
+          {/* Feedback section */}
+          <div>
+            <p className="text-[10px] font-sans tracking-widest uppercase text-muted-foreground/70 mb-4">
+              Feedback
+            </p>
+            <RadioGroup
+              value={feedbackMode}
+              onValueChange={(v) => setFeedbackMode(v as FeedbackMode)}
+              className="grid grid-cols-2 gap-3"
+            >
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="off" id="feedback-off" />
+                <Label
+                  htmlFor="feedback-off"
+                  className="text-sm font-sans text-foreground cursor-pointer"
+                >
+                  Off
+                </Label>
+              </div>
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="haptic" id="feedback-haptic" />
+                <Label
+                  htmlFor="feedback-haptic"
+                  className="text-sm font-sans text-foreground cursor-pointer"
+                >
+                  Haptic
+                </Label>
+              </div>
+              {!isNative && (
+                <>
+                  <div className="flex items-center gap-3">
+                    <RadioGroupItem value="audio" id="feedback-audio" />
+                    <Label
+                      htmlFor="feedback-audio"
+                      className="text-sm font-sans text-foreground cursor-pointer"
+                    >
+                      Audio
+                    </Label>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <RadioGroupItem value="both" id="feedback-both" />
+                    <Label
+                      htmlFor="feedback-both"
+                      className="text-sm font-sans text-foreground cursor-pointer"
+                    >
+                      Both
+                    </Label>
+                  </div>
+                </>
+              )}
+            </RadioGroup>
+            {isNative && (
+              <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground/70">
+                Native builds use haptics only for now. Milestone audio is deferred until a review-safe native sound path is confirmed.
+              </p>
+            )}
           </div>
 
           <hr className="border-border" />

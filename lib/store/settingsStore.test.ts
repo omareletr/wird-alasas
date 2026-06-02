@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { useSettingsStore } from "@/lib/store/settingsStore";
 
 beforeEach(() => {
-  useSettingsStore.setState({ resetHour: 5, hasOnboarded: false });
+  useSettingsStore.setState({ resetHour: 5, hasOnboarded: false, feedbackMode: "haptic" });
 });
 
 describe("settingsStore.setResetHour", () => {
@@ -42,5 +42,16 @@ describe("settingsStore.setHasOnboarded", () => {
     useSettingsStore.getState().setHasOnboarded(true);
     useSettingsStore.getState().setHasOnboarded(false);
     expect(useSettingsStore.getState().hasOnboarded).toBe(false);
+  });
+});
+
+describe("settingsStore.setFeedbackMode", () => {
+  it("initial feedbackMode is haptic", () => {
+    expect(useSettingsStore.getState().feedbackMode).toBe("haptic");
+  });
+
+  it("setFeedbackMode stores a feedback preference", () => {
+    useSettingsStore.getState().setFeedbackMode("both");
+    expect(useSettingsStore.getState().feedbackMode).toBe("both");
   });
 });

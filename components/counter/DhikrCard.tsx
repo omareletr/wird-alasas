@@ -5,7 +5,6 @@ import { ProgressRing } from "@/components/counter/ProgressRing";
 import { ResetButton } from "@/components/counter/ResetButton";
 import type { DhikrEntry } from "@/lib/data/adhkar";
 import { getTarget } from "@/lib/data/adhkar";
-import { useHaptic } from "@/lib/hooks/useHaptic";
 import type { DhikrIndex } from "@/lib/storage/schema";
 
 interface DhikrCardProps {
@@ -17,19 +16,19 @@ interface DhikrCardProps {
 
 export function DhikrCard({ entry, count, mode, dhikrIndex }: DhikrCardProps) {
   const target = getTarget(entry, mode);
-  const vibrate = useHaptic();
   const prevCount = useRef(count);
   const [showPulse, setShowPulse] = useState(false);
 
   useEffect(() => {
     if (count !== prevCount.current) {
-      vibrate(10);
-      if (count >= target && prevCount.current < target) {
+      const hitTarget = prevCount.current < target && count >= target;
+
+      if (hitTarget) {
         setShowPulse(true);
       }
       prevCount.current = count;
     }
-  }, [count, target, vibrate]);
+  }, [count, target]);
 
   useEffect(() => {
     if (!showPulse) return;

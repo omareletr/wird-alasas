@@ -7,6 +7,8 @@ export const DHIKR_COUNT = 4 as const;
 
 export type DhikrIndex = 0 | 1 | 2 | 3;
 
+export type FeedbackMode = "off" | "haptic" | "audio" | "both";
+
 /** Active session state persisted to localStorage under "wird-session". */
 export interface ActiveSession {
   /** One count per dhikr index (0–3). */
@@ -24,6 +26,8 @@ export interface UserSettings {
   resetHour: number;
   /** True after the user has completed the first-launch onboarding screen. */
   hasOnboarded: boolean;
+  /** Feedback used for count milestones. */
+  feedbackMode: FeedbackMode;
 }
 
 /**
