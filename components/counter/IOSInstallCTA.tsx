@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { Capacitor } from "@capacitor/core";
 import { motion, AnimatePresence } from "motion/react";
 import { Share, SquarePlus, X } from "lucide-react";
 
@@ -17,6 +18,8 @@ export function IOSInstallCTA() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
+    if (Capacitor.isNativePlatform()) return;
+
     if (!isIOS() || isStandalone() || localStorage.getItem(STORAGE_KEY)) return;
     const timer = setTimeout(() => {
       if (!localStorage.getItem(STORAGE_KEY)) setShow(true);

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" fill="#0c0c0c"/>
+  <circle cx="512" cy="512" r="332" fill="#15120d" stroke="#f59e0b" stroke-width="24"/>
+  <text
+    x="512"
+    y="552"
+    direction="rtl"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    fill="#f59e0b"
+    font-family="Amiri, Scheherazade New, Geeza Pro, serif"
+    font-size="420"
+    font-weight="400"
+  >و</text>
+</svg>

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Amiri, Geist_Mono, IBM_Plex_Sans, Scheherazade_New } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { NativePolish } from "@/components/NativePolish";
 import { StoreHydration } from "@/components/StoreHydration";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
@@ -71,6 +72,7 @@ export default function RootLayout({
       <body className="antialiased" suppressHydrationWarning>
         <ThemeProvider>
           <StoreHydration />
+          <NativePolish />
           {children}
         </ThemeProvider>
         {!isCapacitorBuild && (

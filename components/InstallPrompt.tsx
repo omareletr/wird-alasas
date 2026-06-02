@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Capacitor } from "@capacitor/core";
 import { X } from "lucide-react";
 
 const STORAGE_KEY = "install-prompt-dismissed";
@@ -27,6 +28,8 @@ export function InstallPrompt() {
     if (navigator.storage?.persist) {
       navigator.storage.persist();
     }
+
+    if (Capacitor.isNativePlatform()) return;
 
     if (isStandalone() || localStorage.getItem(STORAGE_KEY)) return;
 

@@ -128,11 +128,25 @@
     height: 100%;
     overflow: hidden;
     overscroll-behavior: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  input,
+  textarea,
+  [contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
   }
   html {
     @apply font-sans;
+  }
+
+  .capacitor-native body {
+    background: var(--background);
   }
 }
