@@ -5,6 +5,8 @@ import "./globals.css";
 import { StoreHydration } from "@/components/StoreHydration";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
+const isCapacitorBuild = process.env.CAPACITOR_BUILD === "true";
+
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -71,11 +73,13 @@ export default function RootLayout({
           <StoreHydration />
           {children}
         </ThemeProvider>
-        <Script
-          id="sw-register"
-          strategy="afterInteractive"
-          src="/sw-register.js"
-        />
+        {!isCapacitorBuild && (
+          <Script
+            id="sw-register"
+            strategy="afterInteractive"
+            src="/sw-register.js"
+          />
+        )}
       </body>
     </html>
   );
