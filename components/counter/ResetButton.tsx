@@ -69,7 +69,7 @@ export function ResetButton({ dhikrIndex }: ResetButtonProps) {
   );
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       {state === "confirming" && (
         <motion.button
           key="confirming"
@@ -77,7 +77,7 @@ export function ResetButton({ dhikrIndex }: ResetButtonProps) {
           aria-label="Confirm reset"
           onPointerDown={handlePointerDown}
           onClick={handleClick}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-sans tracking-widest uppercase select-none bg-accent/15 text-accent"
+          className="flex min-h-9 items-center gap-1.5 rounded-full bg-accent/18 px-3 py-1.5 text-[11px] font-sans tracking-widest text-accent uppercase ring-1 ring-accent/25 select-none"
           style={{ WebkitTapHighlightColor: "transparent" }}
         >
           <RotateCcw size={12} strokeWidth={2} />
@@ -88,7 +88,7 @@ export function ResetButton({ dhikrIndex }: ResetButtonProps) {
         <motion.span
           key="done"
           variants={pillVariants} initial="initial" animate="animate" exit="exit" transition={{ type: "spring", stiffness: 500, damping: 28 }}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-sans tracking-widest uppercase select-none text-green-500 border border-green-500/40"
+          className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-green-500/40 px-3 py-1.5 text-[11px] font-sans tracking-widest text-green-500 uppercase select-none"
         >
           <Check size={12} strokeWidth={2.5} />
           <span>Reset</span>
@@ -101,7 +101,7 @@ export function ResetButton({ dhikrIndex }: ResetButtonProps) {
           aria-label="Reset counter"
           onPointerDown={handlePointerDown}
           onClick={handleClick}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-sans tracking-widest uppercase select-none text-muted-foreground/40 hover:text-muted-foreground/70"
+          className="flex min-h-9 items-center gap-1.5 rounded-full border border-border/70 bg-background/55 px-3 py-1.5 text-[11px] font-sans tracking-widest text-muted-foreground/80 shadow-sm uppercase select-none hover:text-foreground"
           style={{ WebkitTapHighlightColor: "transparent" }}
         >
           <RotateCcw size={12} strokeWidth={2} />

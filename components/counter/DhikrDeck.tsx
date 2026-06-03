@@ -1,6 +1,7 @@
 "use client";
-import { motion, AnimatePresence } from "motion/react";
-import { useState, useCallback } from "react";
+
+import { useCallback, useEffect, useMemo, useRef, useState, type UIEvent } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { ADHKAR } from "@/lib/data/adhkar";
 import { BismillahHeader } from "@/components/counter/BismillahHeader";
 import { DhikrCard } from "@/components/counter/DhikrCard";
@@ -9,91 +10,143 @@ import { useSessionStore } from "@/lib/store/sessionStore";
 import type { DhikrIndex } from "@/lib/storage/schema";
 import { IOSInstallCTA } from "@/components/counter/IOSInstallCTA";
 
-const SWIPE_OFFSET_THRESHOLD = 80; // px — horizontal drag before snapping
-const SWIPE_VELOCITY_THRESHOLD = 500; // px/s — fast flick counts even at short distance
-
-const slideVariants = {
-  enter: (dir: number) => ({ x: dir > 0 ? "100%" : "-100%" }),
-  center: { x: 0 },
-  exit: (dir: number) => ({ x: dir > 0 ? "-100%" : "100%" }),
-};
+function clampPage(index: number): DhikrIndex {
+  return Math.max(0, Math.min(ADHKAR.length - 1, index)) as DhikrIndex;
+}
 
 export function DhikrDeck() {
   const activeIndex = useSessionStore((s) => s.activeIndex);
   const setActiveIndex = useSessionStore((s) => s.setActiveIndex);
   const counts = useSessionStore((s) => s.counts);
   const mode = useSessionStore((s) => s.mode);
-  const [direction, setDirection] = useState<1 | -1>(1);
+  const reduceMotion = useReducedMotion();
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const activeIndexRef = useRef(activeIndex);
+  const scrollFrameRef = useRef<number | null>(null);
+  const scrollCommittedIndexRef = useRef<DhikrIndex | null>(null);
+  const [pageWidth, setPageWidth] = useState(0);
 
-  const handleDragEnd = useCallback(
-    (
-      _e: PointerEvent,
-      info: { offset: { x: number }; velocity: { x: number } }
-    ) => {
-      const { offset, velocity } = info;
-      const swipedLeft =
-        offset.x < -SWIPE_OFFSET_THRESHOLD ||
-        velocity.x < -SWIPE_VELOCITY_THRESHOLD;
-      const swipedRight =
-        offset.x > SWIPE_OFFSET_THRESHOLD ||
-        velocity.x > SWIPE_VELOCITY_THRESHOLD;
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
 
-      if (swipedLeft && activeIndex < ADHKAR.length - 1) {
-        setDirection(1);
-        setActiveIndex((activeIndex + 1) as DhikrIndex);
-      } else if (swipedRight && activeIndex > 0) {
-        setDirection(-1);
-        setActiveIndex((activeIndex - 1) as DhikrIndex);
-      }
-      // No else: dragConstraints spring the card back to x:0 automatically
+  useEffect(() => {
+    const element = scrollerRef.current;
+    if (!element) return;
+
+    const updatePageWidth = () => {
+      const width = element.clientWidth;
+      setPageWidth(width);
+      element.scrollTo({ left: activeIndexRef.current * width, behavior: "auto" });
+    };
+
+    updatePageWidth();
+    const observer = new ResizeObserver(updatePageWidth);
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+      if (scrollFrameRef.current !== null) cancelAnimationFrame(scrollFrameRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    const element = scrollerRef.current;
+    if (!element || pageWidth === 0) return;
+
+    if (scrollCommittedIndexRef.current === activeIndex) {
+      scrollCommittedIndexRef.current = null;
+      return;
+    }
+
+    element.scrollTo({
+      left: activeIndex * pageWidth,
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+  }, [activeIndex, pageWidth, reduceMotion]);
+
+  const handleScroll = useCallback(
+    (event: UIEvent<HTMLDivElement>) => {
+      if (pageWidth === 0) return;
+
+      if (scrollFrameRef.current !== null) cancelAnimationFrame(scrollFrameRef.current);
+
+      const element = event.currentTarget;
+      scrollFrameRef.current = requestAnimationFrame(() => {
+        const nextIndex = clampPage(Math.round(element.scrollLeft / pageWidth));
+
+        if (nextIndex !== activeIndexRef.current) {
+          activeIndexRef.current = nextIndex;
+          scrollCommittedIndexRef.current = nextIndex;
+          setActiveIndex(nextIndex);
+        }
+      });
     },
-    [activeIndex, setActiveIndex]
+    [pageWidth, setActiveIndex]
   );
 
-  const entry = ADHKAR[activeIndex];
-  const count = counts[activeIndex];
+  const pages = useMemo(() => ADHKAR, []);
 
   return (
-    <div className="relative flex flex-col w-full h-full">
-      {/* Bismillah header — part of the flow, above the swipeable card area */}
-      <div className="flex justify-center shrink-0 pt-5 pb-2 pointer-events-none">
+    <div className="relative flex h-full w-full flex-col">
+      <div className="flex shrink-0 justify-center pb-2 pt-4 pointer-events-none sm:pt-5">
         <BismillahHeader />
       </div>
-      <div className="flex-1 relative overflow-hidden">
-        <AnimatePresence initial={false} custom={direction}>
-          <motion.div
-            key={activeIndex}
-            custom={direction}
-            variants={slideVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ type: "spring", stiffness: 300, damping: 30, mass: 0.8 }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.15}
-            dragMomentum={false}
-            onDragEnd={handleDragEnd}
-            className="absolute inset-0"
-            style={{ touchAction: "pan-y" }}
-          >
-            <TapSurface dhikrIndex={activeIndex}>
-              <DhikrCard entry={entry} count={count} mode={mode} dhikrIndex={activeIndex} />
-            </TapSurface>
-          </motion.div>
-        </AnimatePresence>
+
+      <div className="relative min-h-0 flex-1 overflow-hidden">
+        <div
+          ref={scrollerRef}
+          onScroll={handleScroll}
+          className="flex h-full w-full snap-x snap-mandatory overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          style={{
+            WebkitOverflowScrolling: "touch",
+            overscrollBehaviorX: "none",
+            touchAction: "pan-x pan-y",
+          }}
+        >
+          {pages.map((entry) => {
+            const isActive = entry.index === activeIndex;
+            const card = (
+              <DhikrCard
+                entry={entry}
+                count={counts[entry.index]}
+                mode={mode}
+                dhikrIndex={entry.index}
+                isActive={isActive}
+              />
+            );
+
+            return (
+              <div
+                key={entry.index}
+                className="h-full w-full flex-none snap-center snap-always"
+                aria-hidden={!isActive}
+              >
+                {isActive ? (
+                  <TapSurface dhikrIndex={entry.index}>{card}</TapSurface>
+                ) : (
+                  card
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
+
       <IOSInstallCTA />
       <div
-        className="flex items-center justify-center gap-2 shrink-0"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 24px)" }}
+        className="flex min-h-11 shrink-0 items-center justify-center gap-2.5"
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 20px)" }}
       >
         {ADHKAR.map((_, i) => (
           <motion.div
             key={i}
             className="rounded-full bg-foreground"
-            animate={{ opacity: i === activeIndex ? 1 : 0.25 }}
-            transition={{ duration: 0.2 }}
+            animate={{
+              opacity: i === activeIndex ? 0.95 : 0.22,
+              scale: i === activeIndex ? 1.25 : 1,
+            }}
+            transition={{ duration: reduceMotion ? 0.01 : 0.18, ease: "easeOut" }}
             style={{ width: 6, height: 6 }}
           />
         ))}

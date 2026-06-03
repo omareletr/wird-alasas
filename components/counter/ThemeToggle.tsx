@@ -59,7 +59,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={handleToggle}
-      className="flex items-center justify-center h-10 w-10 text-muted-foreground hover:text-foreground transition-colors"
+      className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground active:bg-muted/60"
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
     >
       <AnimatePresence mode="wait" initial={false}>

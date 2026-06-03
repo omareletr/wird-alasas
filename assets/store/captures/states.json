@@ -1,0 +1,332 @@
+[
+  {
+    "id": "daily-wird-counter",
+    "route": "/",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "description": "Main counter with the first dhikr active and partial progress.",
+    "storage": {
+      "localStorage": {
+        "wird-settings": {
+          "state": {
+            "resetHour": 5,
+            "hasOnboarded": true,
+            "feedbackMode": "haptic"
+          },
+          "version": 5
+        },
+        "wird-session": {
+          "state": {
+            "counts": {
+              "0": 7,
+              "1": 0,
+              "2": 0,
+              "3": 0
+            },
+            "mode": "shortened",
+            "sessionStartedAt": 1780387200000,
+            "activeIndex": 0
+          },
+          "version": 1
+        },
+        "wird-theme": {
+          "state": {
+            "theme": "dark"
+          },
+          "version": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "progress-completion",
+    "route": "/",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "description": "Counter near completion to show progress and achievement.",
+    "storage": {
+      "localStorage": {
+        "wird-settings": {
+          "state": {
+            "resetHour": 5,
+            "hasOnboarded": true,
+            "feedbackMode": "haptic"
+          },
+          "version": 5
+        },
+        "wird-session": {
+          "state": {
+            "counts": {
+              "0": 20,
+              "1": 20,
+              "2": 10,
+              "3": 8
+            },
+            "mode": "shortened",
+            "sessionStartedAt": 1780387200000,
+            "activeIndex": 3
+          },
+          "version": 1
+        },
+        "wird-theme": {
+          "state": {
+            "theme": "dark"
+          },
+          "version": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "four-adhkar-flow",
+    "route": "/",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "description": "Later dhikr card active to show the four-part flow.",
+    "storage": {
+      "localStorage": {
+        "wird-settings": {
+          "state": {
+            "resetHour": 5,
+            "hasOnboarded": true,
+            "feedbackMode": "haptic"
+          },
+          "version": 5
+        },
+        "wird-session": {
+          "state": {
+            "counts": {
+              "0": 20,
+              "1": 14,
+              "2": 4,
+              "3": 0
+            },
+            "mode": "shortened",
+            "sessionStartedAt": 1780387200000,
+            "activeIndex": 2
+          },
+          "version": 1
+        },
+        "wird-theme": {
+          "state": {
+            "theme": "dark"
+          },
+          "version": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "history-streaks",
+    "route": "/",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "description": "History sheet open with streak and calendar activity visible.",
+    "storage": {
+      "localStorage": {
+        "wird-settings": {
+          "state": {
+            "resetHour": 5,
+            "hasOnboarded": true,
+            "feedbackMode": "haptic"
+          },
+          "version": 5
+        },
+        "wird-session": {
+          "state": {
+            "counts": {
+              "0": 12,
+              "1": 7,
+              "2": 0,
+              "3": 0
+            },
+            "mode": "shortened",
+            "sessionStartedAt": 1780387200000,
+            "activeIndex": 0
+          },
+          "version": 1
+        },
+        "wird-theme": {
+          "state": {
+            "theme": "dark"
+          },
+          "version": 0
+        }
+      }
+    },
+    "indexedDB": {
+      "name": "wird-alasas",
+      "version": 1,
+      "stores": {
+        "daily-records": {
+          "keyPath": "dayKey",
+          "indexes": [
+            {
+              "name": "by-dayKey",
+              "keyPath": "dayKey"
+            }
+          ],
+          "records": [
+            {
+              "dayKey": "2026-05-25",
+              "counts": {
+                "0": 20,
+                "1": 20,
+                "2": 10,
+                "3": 10
+              },
+              "mode": "shortened",
+              "completedAt": 1779710400000
+            },
+            {
+              "dayKey": "2026-05-26",
+              "counts": {
+                "0": 20,
+                "1": 20,
+                "2": 10,
+                "3": 10
+              },
+              "mode": "shortened",
+              "completedAt": 1779796800000
+            },
+            {
+              "dayKey": "2026-05-27",
+              "counts": {
+                "0": 20,
+                "1": 20,
+                "2": 10,
+                "3": 10
+              },
+              "mode": "shortened",
+              "completedAt": 1779883200000
+            },
+            {
+              "dayKey": "2026-05-28",
+              "counts": {
+                "0": 20,
+                "1": 12,
+                "2": 0,
+                "3": 0
+              },
+              "mode": "shortened",
+              "completedAt": 1779969600000
+            },
+            {
+              "dayKey": "2026-05-29",
+              "counts": {
+                "0": 20,
+                "1": 20,
+                "2": 10,
+                "3": 10
+              },
+              "mode": "shortened",
+              "completedAt": 1780056000000
+            },
+            {
+              "dayKey": "2026-05-30",
+              "counts": {
+                "0": 20,
+                "1": 20,
+                "2": 10,
+                "3": 10
+              },
+              "mode": "shortened",
+              "completedAt": 1780142400000
+            },
+            {
+              "dayKey": "2026-05-31",
+              "counts": {
+                "0": 20,
+                "1": 20,
+                "2": 10,
+                "3": 10
+              },
+              "mode": "shortened",
+              "completedAt": 1780228800000
+            },
+            {
+              "dayKey": "2026-06-01",
+              "counts": {
+                "0": 12,
+                "1": 7,
+                "2": 0,
+                "3": 0
+              },
+              "mode": "shortened",
+              "completedAt": 1780315200000
+            }
+          ]
+        }
+      }
+    },
+    "actions": [
+      {
+        "type": "click",
+        "target": {
+          "role": "button",
+          "name": "History"
+        },
+        "description": "Open the History sheet after localStorage injection and reload."
+      }
+    ]
+  },
+  {
+    "id": "reset-settings",
+    "route": "/",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "description": "Settings sheet open to show mode, feedback, and daily reset time.",
+    "storage": {
+      "localStorage": {
+        "wird-settings": {
+          "state": {
+            "resetHour": 5,
+            "hasOnboarded": true,
+            "feedbackMode": "haptic"
+          },
+          "version": 5
+        },
+        "wird-session": {
+          "state": {
+            "counts": {
+              "0": 5,
+              "1": 0,
+              "2": 0,
+              "3": 0
+            },
+            "mode": "shortened",
+            "sessionStartedAt": 1780387200000,
+            "activeIndex": 0
+          },
+          "version": 1
+        },
+        "wird-theme": {
+          "state": {
+            "theme": "dark"
+          },
+          "version": 0
+        }
+      }
+    },
+    "actions": [
+      {
+        "type": "click",
+        "target": {
+          "role": "button",
+          "name": "Settings"
+        },
+        "description": "Open the Settings sheet after localStorage injection and reload."
+      }
+    ]
+  }
+]

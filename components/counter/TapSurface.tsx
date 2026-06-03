@@ -59,7 +59,7 @@ export function TapSurface({ dhikrIndex, onTap, children }: TapSurfaceProps) {
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerCancel}
       style={{
-        touchAction: "manipulation",
+        touchAction: "pan-x pan-y",
         userSelect: "none",
         WebkitUserSelect: "none",
         overscrollBehavior: "none",

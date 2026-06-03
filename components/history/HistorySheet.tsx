@@ -31,21 +31,28 @@ export function HistorySheet() {
     <Sheet>
       <SheetTrigger asChild>
         <button
-          className="flex items-center justify-center h-10 w-10 text-muted-foreground/70 hover:text-muted-foreground transition-colors"
+          className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground/70 transition-colors hover:text-muted-foreground active:bg-muted/60"
           aria-label="History"
         >
           <History size={18} />
         </button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="bg-card border-t border-border max-h-[85vh]">
+      <SheetContent side="bottom" className="max-h-[86vh] border-t border-border bg-card">
         <SheetHeader>
           <SheetTitle className="text-[11px] font-sans tracking-[0.2em] uppercase text-muted-foreground text-left">
             History
           </SheetTitle>
         </SheetHeader>
-        <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-6 space-y-6">
+        <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-7 space-y-6 [-webkit-overflow-scrolling:touch]">
           {records === null ? (
-            <p className="text-[10px] font-sans text-muted-foreground/70">Loading…</p>
+            <p className="text-sm font-sans text-muted-foreground/70">Loading history...</p>
+          ) : records.length === 0 ? (
+            <div className="rounded-2xl border border-border/70 bg-muted/30 px-4 py-5 text-center">
+              <p className="text-sm text-foreground">No completed days yet</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground/75">
+                Your daily records will appear here after the first reset.
+              </p>
+            </div>
           ) : (
             <>
               <StreakDisplay current={streaks.current} longest={streaks.longest} />

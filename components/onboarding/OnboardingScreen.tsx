@@ -34,19 +34,22 @@ export function OnboardingScreen() {
         <p className="text-sm font-sans text-muted-foreground text-center leading-relaxed max-w-[260px]">
           A quiet space to count your dhikr and keep your daily wird alive.
         </p>
+        <p className="max-w-[280px] text-center text-xs leading-relaxed text-muted-foreground/75">
+          Your progress stays on this device. Choose when today&apos;s wird should close and move into history.
+        </p>
       </div>
 
       {/* Reset time picker */}
       <div className="flex flex-col px-6 gap-4">
         <p className="text-[10px] font-sans tracking-widest uppercase text-muted-foreground/70 text-center">
-          When should your wird reset each day?
+          Daily history reset
         </p>
 
         <ResetTimePicker value={selectedHour} onChange={setSelectedHour} />
 
         <button
           onClick={handleBegin}
-          className="w-full py-3 rounded-lg bg-foreground text-background text-sm font-sans tracking-[0.15em] uppercase transition-opacity hover:opacity-80 active:opacity-70"
+          className="min-h-12 w-full rounded-xl bg-foreground px-4 py-3 text-sm font-sans tracking-[0.15em] uppercase text-background transition-opacity hover:opacity-80 active:opacity-70"
         >
           Begin
         </button>

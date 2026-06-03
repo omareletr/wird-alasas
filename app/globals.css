@@ -149,4 +149,15 @@
   .capacitor-native body {
     background: var(--background);
   }
+
+  @keyframes progress-ring-pulse {
+    from {
+      opacity: 0.35;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.06);
+    }
+  }
 }

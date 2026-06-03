@@ -39,7 +39,7 @@ export function SettingsSheet() {
     <Sheet>
       <SheetTrigger asChild>
         <button
-          className="flex items-center justify-center h-10 w-10 text-muted-foreground/70 hover:text-muted-foreground transition-colors"
+          className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground/70 transition-colors hover:text-muted-foreground active:bg-muted/60"
           aria-label="Settings"
         >
           <Settings size={18} />
@@ -47,14 +47,14 @@ export function SettingsSheet() {
       </SheetTrigger>
       <SheetContent
         side="bottom"
-        className="bg-card border-t border-border max-h-[85vh]"
+        className="max-h-[86vh] border-t border-border bg-card"
       >
         <SheetHeader>
           <SheetTitle className="text-[11px] font-sans tracking-[0.2em] uppercase text-muted-foreground text-left">
             Settings
           </SheetTitle>
         </SheetHeader>
-        <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-6 space-y-4">
+        <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-7 space-y-5 [-webkit-overflow-scrolling:touch]">
           {/* Mode section */}
           <div>
             <p className="text-[10px] font-sans tracking-widest uppercase text-muted-foreground/70 mb-4">
@@ -141,7 +141,7 @@ export function SettingsSheet() {
             </RadioGroup>
             {isNative && (
               <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground/70">
-                Native builds use haptics only for now. Milestone audio is deferred until a review-safe native sound path is confirmed.
+                On iPhone, feedback uses haptics only for now.
               </p>
             )}
           </div>
@@ -152,6 +152,9 @@ export function SettingsSheet() {
           <div>
             <p className="text-[10px] font-sans tracking-widest uppercase text-muted-foreground/70 mb-4">
               Daily reset time
+            </p>
+            <p className="mb-3 text-[11px] leading-relaxed text-muted-foreground/70">
+              Your counts roll into history at this time each day.
             </p>
             <ResetTimePicker value={resetHour} onChange={setResetHour} />
           </div>

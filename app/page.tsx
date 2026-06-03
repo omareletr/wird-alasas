@@ -78,8 +78,8 @@ export default function CounterPage() {
   return (
     <main className="relative flex flex-col h-dvh w-full bg-background overflow-hidden">
       <div
-        className="grid grid-cols-3 items-center px-5 pb-3 shrink-0"
-        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 20px)" }}
+        className="grid grid-cols-3 items-center px-4 pb-2 shrink-0"
+        style={{ paddingTop: "calc(env(safe-area-inset-top, 0px) + 16px)" }}
       >
         <div className="flex items-center gap-0">
           <HistorySheet />

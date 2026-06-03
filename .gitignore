@@ -47,3 +47,6 @@ next-env.d.ts
 # serwist — generated at build time
 /public/sw.js
 /public/sw.js.map
+
+# superpowers visual companion scratch files
+/.superpowers/

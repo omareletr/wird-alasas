@@ -1,5 +1,4 @@
 "use client";
-import { motion } from "motion/react";
 
 interface ProgressRingProps {
   count: number;
@@ -7,6 +6,7 @@ interface ProgressRingProps {
   size?: number;
   strokeWidth?: number;
   showPulse?: boolean;
+  animateProgress?: boolean;
 }
 
 export function ProgressRing({
@@ -15,11 +15,14 @@ export function ProgressRing({
   size = 280,
   strokeWidth = 6,
   showPulse = false,
+  animateProgress = true,
 }: ProgressRingProps) {
   const radius = (size - strokeWidth) / 2;
   const center = size / 2;
   const progress = Math.min(count / target, 1);
   const completed = count >= target;
+  const circumference = 2 * Math.PI * radius;
+  const dashOffset = circumference * (1 - progress);
 
   return (
     <svg
@@ -39,7 +42,7 @@ export function ProgressRing({
         strokeWidth={strokeWidth}
       />
       {/* Progress ring */}
-      <motion.circle
+      <circle
         cx={center}
         cy={center}
         r={radius}
@@ -47,14 +50,17 @@ export function ProgressRing({
         stroke={completed ? "#22c55e" : "var(--accent)"}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: progress }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        style={{ rotate: -90, originX: "50%", originY: "50%" }}
+        strokeDasharray={circumference}
+        strokeDashoffset={dashOffset}
+        style={{
+          transform: "rotate(-90deg)",
+          transformOrigin: "50% 50%",
+          transition: animateProgress ? "stroke-dashoffset 300ms ease-out, stroke 160ms ease-out" : "none",
+        }}
       />
       {/* Completion glow pulse */}
       {showPulse && (
-        <motion.circle
+        <circle
           key="complete-pulse"
           cx={center}
           cy={center}
@@ -63,10 +69,12 @@ export function ProgressRing({
           stroke="#22c55e"
           strokeWidth={strokeWidth > 1 ? strokeWidth - 1 : strokeWidth}
           strokeLinecap="round"
-          initial={{ opacity: 0.35, scale: 1 }}
-          animate={{ opacity: 0, scale: 1.06 }}
-          transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-          style={{ originX: "50%", originY: "50%" }}
+          strokeDasharray={circumference}
+          strokeDashoffset={0}
+          style={{
+            animation: "progress-ring-pulse 800ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
+            transformOrigin: "50% 50%",
+          }}
         />
       )}
     </svg>

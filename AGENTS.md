@@ -86,7 +86,7 @@ In Client Components, swap the import for `@/lib/supabase/client`.
 - The CSP in `netlify.toml` already allows `*.supabase.co`. If you add other
   external services (analytics, CDNs), widen `connect-src` / `img-src` there.
 
-## Conventions for Claude Code
+## Conventions for Codex
 
 - **Branch workflow:** after merging to `main`, always switch back to `staging`.
 - **Auth reads:** use `supabase.auth.getUser()` (verifies the token), never

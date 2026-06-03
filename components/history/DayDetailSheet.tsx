@@ -36,12 +36,12 @@ export function DayDetailSheet({ dayKey, onClose }: DayDetailSheetProps) {
       : "";
 
   return (
-    <div className="absolute inset-0 bg-card z-10 flex flex-col p-4">
+    <div className="absolute inset-0 z-10 flex flex-col bg-card px-5 pb-6 pt-4">
       {/* Header */}
       <div className="flex items-center gap-2 mb-6">
         <button
           onClick={onClose}
-          className="p-1 text-muted-foreground hover:text-foreground transition-colors"
+          className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground active:bg-muted/60"
           aria-label="Back"
         >
           <ChevronLeft size={20} />

@@ -12,9 +12,10 @@ interface DhikrCardProps {
   count: number;
   mode: "full" | "shortened";
   dhikrIndex: DhikrIndex;
+  isActive?: boolean;
 }
 
-export function DhikrCard({ entry, count, mode, dhikrIndex }: DhikrCardProps) {
+export function DhikrCard({ entry, count, mode, dhikrIndex, isActive = true }: DhikrCardProps) {
   const target = getTarget(entry, mode);
   const prevCount = useRef(count);
   const [showPulse, setShowPulse] = useState(false);
@@ -37,9 +38,9 @@ export function DhikrCard({ entry, count, mode, dhikrIndex }: DhikrCardProps) {
   }, [showPulse]);
 
   return (
-    <div className="flex flex-col h-full w-full select-none px-8">
+    <div className="flex h-full w-full select-none flex-col px-6 sm:px-8">
       {/* Ring + text — share all remaining space, centered together */}
-      <div className="flex-1 flex flex-col items-center justify-center gap-5 min-h-0">
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-5 py-2 sm:gap-6">
         {/* Progress ring — reset button floats above without affecting layout */}
         <div className="relative flex items-center justify-center shrink-0">
           <AnimatePresence>
@@ -47,22 +48,29 @@ export function DhikrCard({ entry, count, mode, dhikrIndex }: DhikrCardProps) {
               <motion.div
                 className="absolute left-1/2 -translate-x-1/2 w-max"
                 style={{ bottom: "calc(100% + 14px)" }}
-                initial={{ opacity: 0, scale: 0.92, y: 3 }}
-                animate={{ opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 500, damping: 28 } }}
+                initial={{ opacity: 0, scale: 0.94, y: 4 }}
+                animate={{ opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 420, damping: 30 } }}
                 exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.08, ease: "easeIn" } }}
               >
                 <ResetButton dhikrIndex={dhikrIndex} />
               </motion.div>
             )}
           </AnimatePresence>
-          <ProgressRing count={count} target={target} size={220} strokeWidth={4} showPulse={showPulse} />
+          <ProgressRing
+            count={count}
+            target={target}
+            size={220}
+            strokeWidth={4}
+            showPulse={isActive && showPulse}
+            animateProgress={isActive}
+          />
           <div className="absolute flex flex-col items-center gap-1">
             <motion.span
               key={count}
-              className="text-4xl font-mono tabular-nums text-foreground leading-none"
-              initial={{ scale: 1.15 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              className="text-4xl font-mono tabular-nums text-foreground leading-none sm:text-5xl"
+              initial={{ scale: 1.08, y: 1 }}
+              animate={{ scale: 1, y: 0 }}
+              transition={{ type: "spring", stiffness: 360, damping: 24 }}
             >
               {count}
             </motion.span>
@@ -73,26 +81,26 @@ export function DhikrCard({ entry, count, mode, dhikrIndex }: DhikrCardProps) {
         </div>
 
         {/* Text block */}
-        <div className="flex flex-col items-center gap-4 w-full">
-        {/* Arabic text */}
-        <p
-          dir="rtl"
-          lang="ar"
-          className="text-center text-2xl text-foreground"
-          style={{ fontFamily: "var(--font-arabic)", lineHeight: 2.0 }}
-        >
-          {entry.arabic}
-        </p>
+        <div className="flex w-full max-w-[340px] flex-col items-center gap-3.5 sm:gap-4">
+          {/* Arabic text */}
+          <p
+            dir="rtl"
+            lang="ar"
+            className="text-center text-[1.45rem] text-foreground sm:text-2xl"
+            style={{ fontFamily: "var(--font-arabic)", lineHeight: 1.9 }}
+          >
+            {entry.arabic}
+          </p>
 
-        {/* Transliteration */}
-        <p className="text-center text-[13px] italic text-muted-foreground leading-relaxed" dir="ltr">
-          {entry.transliteration}
-        </p>
+          {/* Transliteration */}
+          <p className="text-center text-[13px] italic leading-relaxed text-muted-foreground" dir="ltr">
+            {entry.transliteration}
+          </p>
 
-        {/* Translation */}
-        <p className="text-center text-[12px] text-muted-foreground/70 leading-relaxed max-w-xs" dir="ltr">
-          {entry.translation}
-        </p>
+          {/* Translation */}
+          <p className="max-w-xs text-center text-[12px] leading-relaxed text-muted-foreground/80" dir="ltr">
+            {entry.translation}
+          </p>
         </div>
       </div>
     </div>

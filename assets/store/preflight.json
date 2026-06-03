@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-06-02T23:43:11.588Z",
+  "repo": "wird_alasas",
+  "iosWrapperFound": true,
+  "androidWrapperFound": true,
+  "nativeSignals": [
+    "@capacitor/core"
+  ],
+  "phoneOnlyStatus": "No blocking non-phone signals found in local wrapper files.",
+  "status": "Native wrapper signals found. Local files do not show blocking non-phone targets, but confirm store configuration before final upload.",
+  "paths": {
+    "ios": [
+      "ios",
+      "App"
+    ],
+    "android": [
+      "android",
+      "capacitor.config.ts"
+    ]
+  },
+  "inspections": {
+    "ios": {
+      "infoPlist": "ios/App/App/Info.plist",
+      "requiresIPhoneOS": true,
+      "hasIpadSpecificOrientations": false
+    },
+    "android": {
+      "manifest": "android/app/src/main/AndroidManifest.xml",
+      "leanbackLauncher": false,
+      "wearFeature": false,
+      "televisionFeature": false,
+      "automotiveFeature": false
+    }
+  },
+  "findings": [
+    "iOS Info.plist includes LSRequiresIPhoneOS=true.",
+    "Android manifest has no Wear OS, TV, Automotive, or Leanback launcher signals."
+  ],
+  "blockers": []
+}
