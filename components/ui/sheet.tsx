@@ -2,13 +2,116 @@
 
 import * as React from "react"
 import { Dialog as SheetPrimitive } from "radix-ui"
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  type Transition,
+  type Variants,
+} from "motion/react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { XIcon } from "lucide-react"
 
-function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
-  return <SheetPrimitive.Root data-slot="sheet" {...props} />
+type SheetSide = "top" | "right" | "bottom" | "left"
+
+type SheetContextValue = {
+  open: boolean
+}
+
+const SheetContext = React.createContext<SheetContextValue | null>(null)
+
+const overlayVariants: Variants = {
+  closed: { opacity: 0, backdropFilter: "blur(0px)" },
+  open: { opacity: 1, backdropFilter: "blur(2px)" },
+}
+
+const overlayTransition: Transition = {
+  duration: 0.18,
+  ease: "easeOut",
+}
+
+const reducedOverlayTransition: Transition = {
+  duration: 0.05,
+  ease: "linear",
+}
+
+const sheetTransition: Transition = {
+  type: "spring",
+  stiffness: 420,
+  damping: 38,
+  mass: 0.9,
+}
+
+const sheetExitTransition: Transition = {
+  type: "tween",
+  duration: 0.2,
+  ease: [0.32, 0, 0.67, 0],
+}
+
+const reducedSheetTransition: Transition = {
+  duration: 0.05,
+  ease: "linear",
+}
+
+function getSheetClosedState(side: SheetSide) {
+  switch (side) {
+    case "top":
+      return { y: "-100%", opacity: 0.98, scale: 0.985 }
+    case "bottom":
+      return { y: "100%", opacity: 0.98, scale: 0.985 }
+    case "left":
+      return { x: "-100%", opacity: 0.98 }
+    case "right":
+      return { x: "100%", opacity: 0.98 }
+  }
+}
+
+function getSheetVariants(side: SheetSide, prefersReducedMotion: boolean): Variants {
+  if (prefersReducedMotion) {
+    return {
+      closed: { opacity: 0, transition: reducedSheetTransition },
+      open: { opacity: 1, transition: reducedSheetTransition },
+    }
+  }
+
+  return {
+    closed: { ...getSheetClosedState(side), transition: sheetExitTransition },
+    open: { x: 0, y: 0, opacity: 1, scale: 1, transition: sheetTransition },
+  }
+}
+
+function Sheet({
+  open: controlledOpen,
+  defaultOpen,
+  onOpenChange,
+  ...props
+}: React.ComponentProps<typeof SheetPrimitive.Root>) {
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(
+    defaultOpen ?? false
+  )
+  const open = controlledOpen ?? uncontrolledOpen
+
+  function handleOpenChange(nextOpen: boolean) {
+    if (controlledOpen === undefined) {
+      setUncontrolledOpen(nextOpen)
+    }
+
+    onOpenChange?.(nextOpen)
+  }
+
+  return (
+    <SheetContext.Provider value={{ open }}>
+      <SheetPrimitive.Root
+        data-slot="sheet"
+        open={open}
+        defaultOpen={defaultOpen}
+        onOpenChange={handleOpenChange}
+        {...props}
+      />
+    </SheetContext.Provider>
+  )
 }
 
 function SheetTrigger({
@@ -33,15 +136,24 @@ function SheetOverlay({
   className,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Overlay>) {
+  const prefersReducedMotion = useReducedMotion() === true
+
   return (
     <SheetPrimitive.Overlay
+      asChild
+      forceMount
       data-slot="sheet-overlay"
-      className={cn(
-        "fixed inset-0 z-50 bg-black/30 duration-200 supports-backdrop-filter:backdrop-blur-[2px] data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 dark:bg-black/45",
-        className
-      )}
       {...props}
-    />
+    >
+      <motion.div
+        className={cn("fixed inset-0 z-50 bg-black/30 dark:bg-black/45", className)}
+        variants={overlayVariants}
+        initial="closed"
+        animate="open"
+        exit="closed"
+        transition={prefersReducedMotion ? reducedOverlayTransition : overlayTransition}
+      />
+    </SheetPrimitive.Overlay>
   )
 }
 
@@ -52,36 +164,54 @@ function SheetContent({
   showCloseButton = true,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
-  side?: "top" | "right" | "bottom" | "left"
+  side?: SheetSide
   showCloseButton?: boolean
 }) {
+  const context = React.useContext(SheetContext)
+  const open = context?.open ?? false
+  const prefersReducedMotion = useReducedMotion() === true
+  const sheetVariants = getSheetVariants(side, prefersReducedMotion)
+
   return (
-    <SheetPortal>
-      <SheetOverlay />
-      <SheetPrimitive.Content
-        data-slot="sheet-content"
-        data-side={side}
-        className={cn(
-          "fixed z-50 flex flex-col gap-4 bg-popover bg-clip-padding text-sm text-popover-foreground shadow-2xl transition duration-300 ease-out data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:rounded-t-[28px] data-[side=bottom]:border-t data-[side=bottom]:pb-[env(safe-area-inset-bottom,0px)] data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:border-r data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:border-l data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-[side=bottom]:data-open:slide-in-from-bottom-10 data-[side=left]:data-open:slide-in-from-left-10 data-[side=right]:data-open:slide-in-from-right-10 data-[side=top]:data-open:slide-in-from-top-10 data-closed:animate-out data-closed:fade-out-0 data-[side=bottom]:data-closed:slide-out-to-bottom-10 data-[side=left]:data-closed:slide-out-to-left-10 data-[side=right]:data-closed:slide-out-to-right-10 data-[side=top]:data-closed:slide-out-to-top-10",
-          className
-        )}
-        {...props}
-      >
-        {children}
-        {showCloseButton && (
-          <SheetPrimitive.Close data-slot="sheet-close" asChild>
-            <Button
-              variant="ghost"
-              className="absolute top-3 right-3 size-11 rounded-full text-muted-foreground/75 hover:text-foreground"
-              size="icon"
+    <AnimatePresence initial={false}>
+      {open && (
+        <SheetPortal forceMount>
+          <SheetOverlay />
+          <SheetPrimitive.Content
+            asChild
+            forceMount
+            data-slot="sheet-content"
+            data-side={side}
+            {...props}
+          >
+            <motion.div
+              className={cn(
+                "fixed z-50 flex flex-col gap-4 bg-popover bg-clip-padding text-sm text-popover-foreground shadow-2xl data-[side=bottom]:inset-x-0 data-[side=bottom]:bottom-0 data-[side=bottom]:h-auto data-[side=bottom]:rounded-t-[28px] data-[side=bottom]:border-t data-[side=bottom]:pb-[env(safe-area-inset-bottom,0px)] data-[side=left]:inset-y-0 data-[side=left]:left-0 data-[side=left]:h-full data-[side=left]:w-3/4 data-[side=left]:border-r data-[side=right]:inset-y-0 data-[side=right]:right-0 data-[side=right]:h-full data-[side=right]:w-3/4 data-[side=right]:border-l data-[side=top]:inset-x-0 data-[side=top]:top-0 data-[side=top]:h-auto data-[side=top]:border-b data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-sm",
+                className
+              )}
+              variants={sheetVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
             >
-              <XIcon className="size-4" />
-              <span className="sr-only">Close</span>
-            </Button>
-          </SheetPrimitive.Close>
-        )}
-      </SheetPrimitive.Content>
-    </SheetPortal>
+              {children}
+              {showCloseButton && (
+                <SheetPrimitive.Close data-slot="sheet-close" asChild>
+                  <Button
+                    variant="ghost"
+                    className="absolute top-3 right-3 size-11 rounded-full text-muted-foreground/75 hover:text-foreground"
+                    size="icon"
+                  >
+                    <XIcon className="size-4" />
+                    <span className="sr-only">Close</span>
+                  </Button>
+                </SheetPrimitive.Close>
+              )}
+            </motion.div>
+          </SheetPrimitive.Content>
+        </SheetPortal>
+      )}
+    </AnimatePresence>
   )
 }
 
