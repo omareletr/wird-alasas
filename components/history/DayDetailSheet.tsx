@@ -8,19 +8,26 @@ import type { DailyRecord } from "@/lib/storage/schema";
 
 interface DayDetailSheetProps {
   dayKey: string | null;
+  records?: DailyRecord[];
   onClose: () => void;
 }
 
-export function DayDetailSheet({ dayKey, onClose }: DayDetailSheetProps) {
+export function DayDetailSheet({ dayKey, records = [], onClose }: DayDetailSheetProps) {
   const [record, setRecord] = useState<DailyRecord | null | undefined>(null);
 
   useEffect(() => {
     if (dayKey !== null) {
+      const displayRecord = records.find((item) => item.dayKey === dayKey);
+      if (displayRecord !== undefined) {
+        setRecord(displayRecord);
+        return;
+      }
+
       getDailyRecord(dayKey).then(setRecord);
     } else {
       setRecord(null);
     }
-  }, [dayKey]);
+  }, [dayKey, records]);
 
   if (dayKey === null) return null;
 

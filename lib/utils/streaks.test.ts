@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { computeStreaks } from "./streaks";
+import { mergeDisplayRecords } from "./displayRecords";
 import type { DailyRecord } from "@/lib/storage/schema";
 import type { DhikrIndex } from "@/lib/storage/schema";
 
@@ -126,5 +127,23 @@ describe("computeStreaks", () => {
     // Today is "2026-05-30" but no record for it; only "2026-05-29"
     const records = [fullRecord("2026-05-29")];
     expect(computeStreaks(records)).toEqual({ current: 1, longest: 1 });
+  });
+
+  it("live partial current day sustains the current streak immediately", () => {
+    const records = mergeDisplayRecords(
+      [fullRecord("2026-05-28"), fullRecord("2026-05-29")],
+      partialRecord("2026-05-30")
+    );
+
+    expect(computeStreaks(records)).toEqual({ current: 3, longest: 3 });
+  });
+
+  it("live none current day does not increment the current streak", () => {
+    const records = mergeDisplayRecords(
+      [fullRecord("2026-05-28"), fullRecord("2026-05-29")],
+      noneRecord("2026-05-30")
+    );
+
+    expect(computeStreaks(records)).toEqual({ current: 2, longest: 2 });
   });
 });

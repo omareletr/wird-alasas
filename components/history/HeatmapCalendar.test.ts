@@ -10,7 +10,8 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { recordsToActivityData } from "@/components/history/HeatmapCalendar";
+import { buildActivityRange, recordsToActivityData } from "@/components/history/HeatmapCalendar";
+import { mergeDisplayRecords } from "@/lib/utils/displayRecords";
 import type { DailyRecord } from "@/lib/storage/schema";
 import type { DhikrIndex } from "@/lib/storage/schema";
 
@@ -67,6 +68,47 @@ it("full record (all 4 dhikr complete) maps to level=4, count=4", () => {
 });
 
 describe("recordsToActivityData", () => {
+  it("builds an inclusive fixed date range ending on the supplied day", () => {
+    expect(buildActivityRange("2026-05-30", 3)).toEqual([
+      "2026-05-28",
+      "2026-05-29",
+      "2026-05-30",
+    ]);
+  });
+
+  it("fills a fixed range with level-0 days when no records exist", () => {
+    const result = recordsToActivityData([], { endDayKey: "2026-05-30", dayCount: 3 });
+
+    expect(result).toEqual([
+      { date: "2026-05-28", level: 0, count: 0 },
+      { date: "2026-05-29", level: 0, count: 0 },
+      { date: "2026-05-30", level: 0, count: 0 },
+    ]);
+  });
+
+  it("overlays archived records onto a zero-filled fixed range", () => {
+    const result = recordsToActivityData(
+      [makeRecord("2026-05-29", 200, 0, 0, 0)],
+      { endDayKey: "2026-05-30", dayCount: 3 }
+    );
+
+    expect(result).toEqual([
+      { date: "2026-05-28", level: 0, count: 0 },
+      { date: "2026-05-29", level: 2, count: 2 },
+      { date: "2026-05-30", level: 0, count: 0 },
+    ]);
+  });
+
+  it("uses the live current-day record over an archived same-day record", () => {
+    const records = mergeDisplayRecords(
+      [makeRecord("2026-05-30", 0, 0, 0, 0)],
+      makeRecord("2026-05-30", 200, 200, 100, 100)
+    );
+    const result = recordsToActivityData(records, { endDayKey: "2026-05-30", dayCount: 1 });
+
+    expect(result).toEqual([{ date: "2026-05-30", level: 4, count: 4 }]);
+  });
+
   it("output sorted ascending by date", () => {
     const records = [
       makeRecord("2026-05-30", 200, 200, 100, 100),

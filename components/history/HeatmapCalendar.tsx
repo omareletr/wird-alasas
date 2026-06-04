@@ -13,6 +13,48 @@ interface HeatmapCalendarProps {
   onDayClick?: (date: string) => void;
 }
 
+interface RecordsToActivityDataOptions {
+  endDayKey?: string;
+  dayCount?: number;
+}
+
+const DEFAULT_DAY_COUNT = 91;
+
+function dayLevel(record: DailyRecord): 0 | 1 | 2 | 3 | 4 {
+  const level = classifyDay(record.counts, record.mode);
+  return level === "full"
+    ? 4
+    : level === "multi"
+      ? 3
+      : level === "one"
+        ? 2
+        : level === "partial"
+          ? 1
+          : 0;
+}
+
+export function formatActivityDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+export function addDays(date: Date, days: number): Date {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+export function buildActivityRange(endDayKey: string, dayCount: number = DEFAULT_DAY_COUNT): string[] {
+  if (dayCount <= 0) return [];
+
+  const endDate = new Date(`${endDayKey}T00:00:00`);
+  return Array.from({ length: dayCount }, (_, index) =>
+    formatActivityDate(addDays(endDate, index - dayCount + 1))
+  );
+}
+
 /**
  * Maps DailyRecord[] to Activity[] for react-activity-calendar.
  *
@@ -25,20 +67,30 @@ interface HeatmapCalendarProps {
  *
  * Output is sorted ascending by dayKey (ISO strings sort lexicographically).
  */
-export function recordsToActivityData(records: DailyRecord[]): Activity[] {
+export function recordsToActivityData(
+  records: DailyRecord[],
+  options: RecordsToActivityDataOptions = {}
+): Activity[] {
+  const recordLevels = new Map(records.map((record) => [record.dayKey, dayLevel(record)]));
+  const visibleDayKeys =
+    options.endDayKey !== undefined
+      ? buildActivityRange(options.endDayKey, options.dayCount ?? DEFAULT_DAY_COUNT)
+      : null;
+
+  if (visibleDayKeys !== null) {
+    return visibleDayKeys.map((dayKey) => {
+      const levelNum = recordLevels.get(dayKey) ?? 0;
+      return {
+        date: dayKey,
+        count: levelNum,
+        level: levelNum,
+      } satisfies Activity;
+    });
+  }
+
   return records
     .map((r) => {
-      const level = classifyDay(r.counts, r.mode);
-      const levelNum =
-        level === "full"
-          ? 4
-          : level === "multi"
-            ? 3
-            : level === "one"
-              ? 2
-              : level === "partial"
-                ? 1
-                : 0;
+      const levelNum = recordLevels.get(r.dayKey) ?? 0;
       return {
         date: r.dayKey,
         count: levelNum,
@@ -50,7 +102,7 @@ export function recordsToActivityData(records: DailyRecord[]): Activity[] {
 
 // Colors indexed by level 0–4
 const DARK_COLORS = [
-  "oklch(0.15 0 0)",       // 0 — none
+  "oklch(0.27 0.01 260)",  // 0 — none
   "oklch(0.65 0.10 70)",   // 1 — partial (faded amber)
   "oklch(0.72 0.18 70)",   // 2 — one (amber)
   "oklch(0.62 0.10 150)",  // 3 — multi (faded green)
@@ -58,7 +110,7 @@ const DARK_COLORS = [
 ] as const;
 
 const LIGHT_COLORS = [
-  "oklch(0.92 0.01 80)",   // 0 — none
+  "oklch(0.88 0.015 85)",  // 0 — none
   "oklch(0.82 0.08 70)",   // 1 — partial (faded amber)
   "oklch(0.72 0.15 65)",   // 2 — one (amber)
   "oklch(0.78 0.09 150)",  // 3 — multi (faded green)
@@ -75,9 +127,10 @@ export function HeatmapLegend() {
   const theme = useThemeStore((s) => s.theme);
   const colors = theme === "dark" ? DARK_COLORS : LIGHT_COLORS;
   const legendItems = [
+    { color: colors[0], label: "No completion" },
     { color: colors[1], label: "Partial" },
     { color: colors[2], label: "1 of 4" },
-    { color: colors[3], label: "2–3 of 4" },
+    { color: colors[3], label: "2-3 of 4" },
     { color: colors[4], label: "All 4" },
   ];
 
@@ -103,11 +156,7 @@ export function HeatmapCalendar({ data, onDayClick }: HeatmapCalendarProps) {
   const theme = useThemeStore((s) => s.theme);
 
   if (data.length === 0) {
-    return (
-      <p className="text-[10px] font-sans tracking-widest uppercase text-muted-foreground/60">
-        No history yet
-      </p>
-    );
+    return null;
   }
 
   return (
