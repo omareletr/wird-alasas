@@ -1,16 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ActivityCalendar } from "react-activity-calendar";
 import type { Activity, BlockElement } from "react-activity-calendar";
 import "react-activity-calendar/tooltips.css";
 import { classifyDay } from "@/lib/utils/completionClassifier";
 import type { DailyRecord } from "@/lib/storage/schema";
+import { useFeedback } from "@/lib/hooks/useFeedback";
 import { useThemeStore } from "@/lib/store/themeStore";
+
+export interface DayAnchorRect {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+  width: number;
+  height: number;
+}
 
 interface HeatmapCalendarProps {
   data: Activity[];
-  onDayClick?: (date: string) => void;
+  onDayInspect?: (date: string, anchorRect: DayAnchorRect) => void;
+  onDayInspectEnd?: () => void;
+}
+
+interface PressSession {
+  pointerId: number;
+  activated: boolean;
+  latestDay: string | null;
+  latestCell: SVGRectElement | null;
+  inspectedDay: string | null;
 }
 
 interface RecordsToActivityDataOptions {
@@ -19,6 +38,11 @@ interface RecordsToActivityDataOptions {
 }
 
 const DEFAULT_DAY_COUNT = 91;
+const BLOCK_MARGIN = 3;
+const MIN_BLOCK_SIZE = 12;
+const MAX_BLOCK_SIZE = 22;
+const FALLBACK_BLOCK_SIZE = 18;
+const LONG_PRESS_MS = 400;
 
 function dayLevel(record: DailyRecord): 0 | 1 | 2 | 3 | 4 {
   const level = classifyDay(record.counts, record.mode);
@@ -122,58 +146,281 @@ const CALENDAR_THEME = {
   light: [...LIGHT_COLORS],
 };
 
-/** Minimal color legend for the heatmap levels. */
+const LEGEND_ITEMS = [
+  { label: "No completion", colorIndex: 0 },
+  { label: "Partial", colorIndex: 1 },
+  { label: "1 of 4", colorIndex: 2 },
+  { label: "2-3 of 4", colorIndex: 3 },
+  { label: "All 4", colorIndex: 4 },
+] as const;
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+
+function getWeekCount(data: Activity[]): number {
+  if (data.length === 0) return 0;
+
+  const firstDate = new Date(`${data[0].date}T00:00:00`);
+  const leadingDays = firstDate.getDay();
+  return Math.ceil((data.length + leadingDays) / 7);
+}
+
+function toAnchorRect(rect: DOMRect): DayAnchorRect {
+  return {
+    top: rect.top,
+    right: rect.right,
+    bottom: rect.bottom,
+    left: rect.left,
+    width: rect.width,
+    height: rect.height,
+  };
+}
+
+/** Semantic color legend for the heatmap completion levels. */
 export function HeatmapLegend() {
   const theme = useThemeStore((s) => s.theme);
   const colors = theme === "dark" ? DARK_COLORS : LIGHT_COLORS;
-  const legendItems = [
-    { color: colors[0], label: "No completion" },
-    { color: colors[1], label: "Partial" },
-    { color: colors[2], label: "1 of 4" },
-    { color: colors[3], label: "2-3 of 4" },
-    { color: colors[4], label: "All 4" },
-  ];
 
   return (
-    <div className="flex items-center gap-3 flex-wrap">
-      {legendItems.map(({ color, label }) => (
-        <div key={label} className="flex items-center gap-1">
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[9px] font-sans tracking-[0.12em] uppercase text-muted-foreground/60">
+      {LEGEND_ITEMS.map((item) => (
+        <div key={item.label} className="flex items-center gap-1.5">
           <span
             className="inline-block w-2.5 h-2.5 rounded-sm shrink-0"
-            style={{ backgroundColor: color }}
+            style={{ backgroundColor: colors[item.colorIndex] }}
             aria-hidden="true"
           />
-          <span className="text-[9px] font-sans tracking-widest uppercase text-muted-foreground/60">
-            {label}
-          </span>
+          <span>{item.label}</span>
         </div>
       ))}
     </div>
   );
 }
 
-export function HeatmapCalendar({ data, onDayClick }: HeatmapCalendarProps) {
+export function HeatmapCalendar({ data, onDayInspect, onDayInspectEnd }: HeatmapCalendarProps) {
   const theme = useThemeStore((s) => s.theme);
+  const { playTapFeedback } = useFeedback();
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pressSessionRef = useRef<PressSession | null>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const weekCount = useMemo(() => getWeekCount(data), [data]);
+  const blockSize = useMemo(() => {
+    if (containerWidth <= 0 || weekCount <= 0) return FALLBACK_BLOCK_SIZE;
+
+    const availableForBlocks = containerWidth - BLOCK_MARGIN * (weekCount - 1);
+    return clamp(
+      Math.floor(availableForBlocks / weekCount),
+      MIN_BLOCK_SIZE,
+      MAX_BLOCK_SIZE
+    );
+  }, [containerWidth, weekCount]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container === null) return;
+
+    const updateWidth = () => setContainerWidth(container.clientWidth);
+    updateWidth();
+
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", updateWidth);
+      return () => window.removeEventListener("resize", updateWidth);
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (entry !== undefined) {
+        setContainerWidth(entry.contentRect.width);
+      }
+    });
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const clearLongPress = () => {
+      if (longPressTimerRef.current !== null) {
+        clearTimeout(longPressTimerRef.current);
+        longPressTimerRef.current = null;
+      }
+      pressSessionRef.current = null;
+    };
+
+    document.addEventListener("scroll", clearLongPress, true);
+    return () => {
+      clearLongPress();
+      document.removeEventListener("scroll", clearLongPress, true);
+    };
+  }, []);
+
+  function clearLongPressTimer() {
+    if (longPressTimerRef.current !== null) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  }
+
+  function inspectDay(date: string, element: SVGRectElement) {
+    onDayInspect?.(date, toAnchorRect(element.getBoundingClientRect()));
+  }
+
+  function findDayCellFromPoint(clientX: number, clientY: number): SVGRectElement | null {
+    if (typeof document.elementsFromPoint === "function") {
+      for (const element of document.elementsFromPoint(clientX, clientY)) {
+        const cell = element.closest<SVGRectElement>("[data-heatmap-day]");
+        if (cell !== null) return cell;
+      }
+    }
+
+    const element = document.elementFromPoint(clientX, clientY);
+    return element?.closest<SVGRectElement>("[data-heatmap-day]") ?? null;
+  }
+
+  function updateLatestCellFromPointer(event: React.PointerEvent<SVGRectElement>) {
+    const session = pressSessionRef.current;
+    if (session === null || session.pointerId !== event.pointerId) return null;
+
+    const cell = findDayCellFromPoint(event.clientX, event.clientY);
+    const day = cell?.dataset.heatmapDay ?? null;
+    session.latestCell = cell;
+    session.latestDay = day;
+
+    return { cell, day };
+  }
+
+  function activatePressSession() {
+    longPressTimerRef.current = null;
+    const session = pressSessionRef.current;
+    if (session === null || session.latestCell === null || session.latestDay === null) return;
+
+    session.activated = true;
+    session.inspectedDay = session.latestDay;
+    inspectDay(session.latestDay, session.latestCell);
+    playTapFeedback();
+  }
+
+  function clearPressSession(closeActivatedPopover: boolean) {
+    clearLongPressTimer();
+    const wasActivated = pressSessionRef.current?.activated === true;
+    pressSessionRef.current = null;
+
+    if (closeActivatedPopover && wasActivated) {
+      onDayInspectEnd?.();
+    }
+  }
 
   if (data.length === 0) {
     return null;
   }
 
   return (
-    <ActivityCalendar
-      data={data}
-      maxLevel={4}
-      colorScheme={theme}
-      theme={CALENDAR_THEME}
-      blockSize={12}
-      blockMargin={3}
-      fontSize={10}
-      renderBlock={(block: BlockElement, activity: Activity) =>
-        React.cloneElement(block, {
-          onClick: () => onDayClick?.(activity.date),
-          style: { cursor: onDayClick ? "pointer" : "default" },
-        })
-      }
-    />
+    <div ref={containerRef} className="w-full overflow-hidden">
+      <ActivityCalendar
+        data={data}
+        maxLevel={4}
+        colorScheme={theme}
+        theme={CALENDAR_THEME}
+        blockSize={blockSize}
+        blockMargin={BLOCK_MARGIN}
+        blockRadius={2}
+        fontSize={9}
+        showColorLegend={false}
+        showMonthLabels
+        showTotalCount={false}
+        showWeekdayLabels={false}
+        className="!w-full [&_.react-activity-calendar__scroll-container]:!overflow-x-hidden"
+        renderBlock={(block: BlockElement, activity: Activity) =>
+          React.cloneElement(block, {
+            role: "button",
+            tabIndex: 0,
+            "aria-label": `View activity for ${new Date(
+              `${activity.date}T00:00:00Z`
+            ).toLocaleDateString("en-US", {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              timeZone: "UTC",
+            })}`,
+            "data-heatmap-day": activity.date,
+            onPointerDown: (event: React.PointerEvent<SVGRectElement>) => {
+              clearPressSession(false);
+              const target = event.currentTarget;
+              pressSessionRef.current = {
+                pointerId: event.pointerId,
+                activated: false,
+                latestDay: activity.date,
+                latestCell: target,
+                inspectedDay: null,
+              };
+
+              try {
+                target.setPointerCapture(event.pointerId);
+              } catch {
+                // Pointer capture can fail if the pointer is no longer active.
+              }
+
+              longPressTimerRef.current = setTimeout(activatePressSession, LONG_PRESS_MS);
+            },
+            onPointerMove: (event: React.PointerEvent<SVGRectElement>) => {
+              const session = pressSessionRef.current;
+              if (session === null || session.pointerId !== event.pointerId) return;
+
+              const latest = updateLatestCellFromPointer(event);
+              if (!session.activated || latest === null || latest.cell === null || latest.day === null) return;
+
+              if (latest.day !== session.inspectedDay) {
+                session.inspectedDay = latest.day;
+                inspectDay(latest.day, latest.cell);
+                playTapFeedback();
+              }
+            },
+            onPointerUp: (event: React.PointerEvent<SVGRectElement>) => {
+              if (pressSessionRef.current?.pointerId !== event.pointerId) return;
+
+              try {
+                event.currentTarget.releasePointerCapture(event.pointerId);
+              } catch {
+                // The browser may have already released capture before pointerup.
+              }
+
+              clearPressSession(true);
+            },
+            onPointerCancel: (event: React.PointerEvent<SVGRectElement>) => {
+              if (pressSessionRef.current?.pointerId !== event.pointerId) return;
+
+              clearPressSession(true);
+            },
+            onLostPointerCapture: (event: React.PointerEvent<SVGRectElement>) => {
+              if (pressSessionRef.current?.pointerId !== event.pointerId) return;
+
+              clearPressSession(true);
+            },
+            onKeyDown: (event: React.KeyboardEvent<SVGRectElement>) => {
+              if (event.key === "Escape") {
+                onDayInspectEnd?.();
+                return;
+              }
+
+              if (event.key !== "Enter" && event.key !== " ") return;
+              event.preventDefault();
+              inspectDay(activity.date, event.currentTarget);
+            },
+            onBlur: () => {
+              onDayInspectEnd?.();
+            },
+            style: {
+              ...block.props.style,
+              cursor: onDayInspect ? "pointer" : "default",
+              outline: "none",
+              touchAction: "none",
+            },
+          } as React.SVGProps<SVGRectElement> & { "data-heatmap-day": string })
+        }
+      />
+    </div>
   );
 }
