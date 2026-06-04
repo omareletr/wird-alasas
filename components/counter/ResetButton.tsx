@@ -1,20 +1,14 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { RotateCcw, Check } from "lucide-react";
-import { motion, AnimatePresence, useIsPresent } from "motion/react";
-import type { Variants } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { useSessionStore } from "@/lib/store/sessionStore";
 import { useHaptic } from "@/lib/hooks/useHaptic";
+import { cn } from "@/lib/utils";
 import type { DhikrIndex } from "@/lib/storage/schema";
 
 const AUTO_CANCEL_MS = 2500;
 const DONE_MS = 1400;
-
-const pillVariants: Variants = {
-  initial: { opacity: 0, scale: 0.92, y: 3 },
-  animate: { opacity: 1, scale: 1, y: 0 },
-  exit: { opacity: 0, scale: 0.95 },
-};
 
 type State = "idle" | "confirming" | "done";
 
@@ -25,7 +19,7 @@ interface ResetButtonProps {
 export function ResetButton({ dhikrIndex }: ResetButtonProps) {
   const resetCount = useSessionStore((s) => s.resetCount);
   const vibrate = useHaptic();
-  const isPresent = useIsPresent();
+  const prefersReducedMotion = useReducedMotion();
   const [state, setState] = useState<State>("idle");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -47,14 +41,13 @@ export function ResetButton({ dhikrIndex }: ResetButtonProps) {
     return clearTimer;
   }, [state, clearTimer]);
 
-  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+  const stopTapSurfacePropagation = useCallback((e: React.PointerEvent) => {
     e.stopPropagation();
   }, []);
 
   const handleClick = useCallback(
-    (e: React.MouseEvent) => {
+    (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
-      if (!isPresent) return;
       if (state === "idle") {
         setState("confirming");
         vibrate(10);
@@ -65,49 +58,53 @@ export function ResetButton({ dhikrIndex }: ResetButtonProps) {
         vibrate(25);
       }
     },
-    [state, clearTimer, dhikrIndex, isPresent, resetCount, vibrate]
+    [state, clearTimer, dhikrIndex, resetCount, vibrate]
   );
 
+  const isConfirming = state === "confirming";
+  const isDone = state === "done";
+  const Icon = isDone ? Check : RotateCcw;
+  const label = isConfirming ? "Confirm reset?" : "Reset";
+
   return (
-    <AnimatePresence>
-      {state === "confirming" && (
-        <motion.button
-          key="confirming"
-          variants={pillVariants} initial="initial" animate="animate" exit="exit" transition={{ type: "spring", stiffness: 500, damping: 28 }}
-          aria-label="Confirm reset"
-          onPointerDown={handlePointerDown}
-          onClick={handleClick}
-          className="flex min-h-9 items-center gap-1.5 rounded-full bg-accent/18 px-3 py-1.5 text-[11px] font-sans tracking-widest text-accent uppercase ring-1 ring-accent/25 select-none"
-          style={{ WebkitTapHighlightColor: "transparent" }}
-        >
-          <RotateCcw size={12} strokeWidth={2} />
-          <span>Confirm reset?</span>
-        </motion.button>
+    <motion.button
+      type="button"
+      data-counter-control
+      aria-disabled={isDone}
+      aria-label={isConfirming ? "Confirm reset" : "Reset counter"}
+      aria-live="polite"
+      layout={!prefersReducedMotion}
+      whileTap={!prefersReducedMotion && !isDone ? { scale: 0.97 } : undefined}
+      transition={
+        prefersReducedMotion
+          ? { duration: 0 }
+          : { layout: { type: "spring", stiffness: 500, damping: 35, mass: 0.6 } }
+      }
+      onPointerDown={stopTapSurfacePropagation}
+      onPointerUp={stopTapSurfacePropagation}
+      onPointerCancel={stopTapSurfacePropagation}
+      onClick={handleClick}
+      className={cn(
+        isConfirming &&
+          "flex min-h-9 items-center gap-1.5 rounded-full bg-accent/18 px-3 py-1.5 text-[11px] font-sans tracking-widest text-accent uppercase ring-1 ring-accent/25 select-none",
+        isDone &&
+          "inline-flex min-h-9 items-center gap-1.5 rounded-full border border-green-500/40 px-3 py-1.5 text-[11px] font-sans tracking-widest text-green-500 uppercase select-none",
+        !isConfirming &&
+          !isDone &&
+          "flex min-h-9 items-center gap-1.5 text-[11px] font-sans tracking-widest text-muted-foreground/80 uppercase select-none hover:text-foreground"
       )}
-      {state === "done" && (
-        <motion.span
-          key="done"
-          variants={pillVariants} initial="initial" animate="animate" exit="exit" transition={{ type: "spring", stiffness: 500, damping: 28 }}
-          className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-green-500/40 px-3 py-1.5 text-[11px] font-sans tracking-widest text-green-500 uppercase select-none"
-        >
-          <Check size={12} strokeWidth={2.5} />
-          <span>Reset</span>
-        </motion.span>
-      )}
-      {state === "idle" && (
-        <motion.button
-          key="idle"
-          variants={pillVariants} initial="initial" animate="animate" exit="exit" transition={{ type: "spring", stiffness: 500, damping: 28 }}
-          aria-label="Reset counter"
-          onPointerDown={handlePointerDown}
-          onClick={handleClick}
-          className="flex min-h-9 items-center gap-1.5 rounded-full border border-border/70 bg-background/55 px-3 py-1.5 text-[11px] font-sans tracking-widest text-muted-foreground/80 shadow-sm uppercase select-none hover:text-foreground"
-          style={{ WebkitTapHighlightColor: "transparent" }}
-        >
-          <RotateCcw size={12} strokeWidth={2} />
-          <span>Reset</span>
-        </motion.button>
-      )}
-    </AnimatePresence>
+      style={{ WebkitTapHighlightColor: "transparent" }}
+    >
+      <motion.span
+        key={state}
+        className="inline-flex items-center gap-1.5"
+        initial={prefersReducedMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.16, ease: "easeOut" }}
+      >
+        <Icon size={12} strokeWidth={isDone ? 2.5 : 2} />
+        <span>{label}</span>
+      </motion.span>
+    </motion.button>
   );
 }

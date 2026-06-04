@@ -6,6 +6,11 @@ import { useFeedback } from "@/lib/hooks/useFeedback";
 import type { DhikrIndex } from "@/lib/storage/schema";
 
 const HUNDRED_MILESTONE = 100;
+const COUNTER_CONTROL_SELECTOR = "[data-counter-control]";
+
+function isCounterControlTarget(target: EventTarget | null) {
+  return target instanceof Element && target.closest(COUNTER_CONTROL_SELECTOR) !== null;
+}
 
 interface TapSurfaceProps {
   dhikrIndex: DhikrIndex;
@@ -20,12 +25,20 @@ export function TapSurface({ dhikrIndex, onTap, children }: TapSurfaceProps) {
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     if (!e.isPrimary) return;
+    if (isCounterControlTarget(e.target)) {
+      pointerStart.current = null;
+      return;
+    }
     pointerStart.current = { x: e.clientX, y: e.clientY };
   }, []);
 
   const handlePointerUp = useCallback(
     (e: React.PointerEvent) => {
       if (!e.isPrimary || pointerStart.current === null) return;
+      if (isCounterControlTarget(e.target)) {
+        pointerStart.current = null;
+        return;
+      }
       const dx = e.clientX - pointerStart.current.x;
       const dy = e.clientY - pointerStart.current.y;
       pointerStart.current = null;

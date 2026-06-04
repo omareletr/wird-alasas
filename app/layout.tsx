@@ -82,6 +82,28 @@ export default function RootLayout({
             src="/sw-register.js"
           />
         )}
+        {isCapacitorBuild && (
+          <Script
+            id="capacitor-cache-reset"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                (async function(){
+                  try {
+                    if ('serviceWorker' in navigator) {
+                      var registrations = await navigator.serviceWorker.getRegistrations();
+                      await Promise.all(registrations.map(function(registration){ return registration.unregister(); }));
+                    }
+                    if ('caches' in window) {
+                      var keys = await caches.keys();
+                      await Promise.all(keys.map(function(key){ return caches.delete(key); }));
+                    }
+                  } catch (error) {}
+                })();
+              `,
+            }}
+          />
+        )}
       </body>
     </html>
   );
